@@ -26,4 +26,5 @@ Gem::Specification.new do |s|
 
   #development
   s.add_development_dependency('rspec', '~> 2.3.0')
+  s.add_development_dependency('yard')
 end
