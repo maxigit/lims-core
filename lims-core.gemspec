@@ -25,6 +25,6 @@ Gem::Specification.new do |s|
   s.add_dependency('facets', '2.9.3')
 
   #development
-  s.add_development_dependency('rspec', '~> 2.3.0')
+  s.add_development_dependency('rspec', '~> 2.8.0')
   s.add_development_dependency('yard')
 end
