@@ -6,3 +6,11 @@ gemspec
 group :development do
   gem "ruby-debug19"
 end
+
+group :guard do
+  gem "guard"
+  gem "guard-rspec"
+  gem "guard-bundler"
+  gem "guard-yard"
+  gem "growl"
+end
