@@ -1,4 +1,4 @@
-require 'commons'
+require 'common'
 require 'lims/core/labware/receptacle.rb'
 
 module Lims::Core
