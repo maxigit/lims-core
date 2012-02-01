@@ -1,14 +1,13 @@
 # Spec requirements
 require 'labware/spec_helper'
-require 'labware/located_examples'
 require 'labware/receptacle_examples'
 
 # Model requirements
-require 'lims/core/labware/tube'
+require 'lims/core/labware/lane'
 
 module Lims::Core::Labware
-  describe Tube  do
-    it_behaves_like "located" 
+  describe Lane  do
+    it "belongs  to a flowcell "  # contained by a flowcell
     it_behaves_like "receptacle"
   end
 end
