@@ -5,13 +5,13 @@ require 'labware/container_examples'
 require 'labware/labellable_examples'
 
 # Model requirements
-require 'lims/core/labware/plate'
+require 'lims/core/labware/flowcell'
 
 module Lims::Core::Labware
-  describe Plate  do
+  describe Flowcell  do
     it_behaves_like "located" 
-    context "contains wells" do
-      it_behaves_like "a container", Well
+    context "contains lanes" do
+      it_behaves_like "a container", Lane
     end
     it_behaves_like "labellable"
   end
