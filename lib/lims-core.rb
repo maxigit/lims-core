@@ -28,6 +28,8 @@ module Lims
   #    Releasing data to the outside world.
   # 9. Billing and Cost
   #    Related to billing and cost.
+  # 10. {Action}
+  #    What people can do on things.
   #
   # This partition is more for clarity/documentation purposes and it's not meant to be really tight. 
   # However it's more likely than the submodules dependency will be a tree than a graph, (but it's not a necessity).   
