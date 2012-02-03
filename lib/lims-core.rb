@@ -1,6 +1,13 @@
 # vi: spell:spelllang=en ts=2:sts=2:sw=2:et
 require "lims-core/version"
-require "facets"
+
+require 'lims/core/action'
+require 'lims/core/labware'
+require 'lims/core/chemical'
+require 'lims/core/data_release'
+require 'lims/core/funding'
+require 'lims/core/ordering'
+
 
 # LIMS stands for Laboratory Information Management System.
 # A namespace.

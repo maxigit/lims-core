@@ -1,6 +1,6 @@
 #vi: ts=2 sw=2 et spell spelllang=en
 # true needed to avoid modeline comment to be seen as Lims::Core doc.
-true
+require 'lims/core/action/base'
 
 module Lims::Core
   # Actions are high level end user groups of elementary steps that a user can perform on things .
