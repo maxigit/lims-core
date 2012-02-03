@@ -14,7 +14,7 @@ module Lims
   # The Core is split in the following submodule/namespace :
   # 1. {Labware} :
   #    Inert things  used in the lab (plate, robots, tube, etc...).
-  # 2. {Chemicals} :
+  # 2. {Chemical} :
   #    Chemical substances and *reacting* things.
   # 3. {LabProcess}
   #    Related to the work people/robot do in the laboratories.
