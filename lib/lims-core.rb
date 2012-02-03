@@ -24,7 +24,7 @@ module Lims
   #    What changed in the database  (low level).
   # 6. {Tracking} :
   #    What happenened in the lab.
-  # 7. Data Release :
+  # 7. {DataRelease}
   #    Releasing data to the outside world.
   # 9. Billing and Cost
   #    Related to billing and cost.
