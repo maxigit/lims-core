@@ -26,7 +26,7 @@ module Lims
   #    What happenened in the lab.
   # 7. {DataRelease}
   #    Releasing data to the outside world.
-  # 9. Billing and Cost
+  # 9. {Funding}
   #    Related to billing and cost.
   # 10. {Action}
   #    What people can do on things.
