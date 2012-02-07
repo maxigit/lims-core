@@ -1,4 +1,4 @@
-# @private vi: ts=2 sw=2 e
+# @private vi: ts=2 sw=2 et
 require 'lims/core/data_release/study'
 
 module Lims::Core
