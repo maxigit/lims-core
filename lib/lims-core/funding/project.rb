@@ -4,7 +4,7 @@ require 'common'
 module Lims::Core
   module Funding
     # A project corresponds to a source of funding.
-    # It has a manager and quotas.
+    # It has a manager and {Quota quotas}.
     class Project
     end
   end
