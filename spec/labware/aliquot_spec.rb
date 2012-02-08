@@ -1,10 +1,10 @@
 # Spec requirements
-require 'chemical/spec_helper'
+require 'labware/spec_helper'
 
 # Model requirements
-require 'lims/core/chemical/aliquot'
+require 'lims/core/labware/aliquot'
 
-module Lims::Core::Chemical
+module Lims::Core::Labware
   describe Aliquot do
     context "to be valid" do
       it "should have an owner"

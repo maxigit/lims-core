@@ -3,13 +3,13 @@ require 'common'
 
 module Lims::Core
   module Labware
-    # A Receptacle has a chemical content which is a set of {Chemical::Aliquot aliquots}.
-    # {include:Chemical::Aliquot}
+    # A Receptacle has a chemical content which is a set of {Labware::Aliquot aliquots}.
+    # {include:Labware::Aliquot}
     module Receptacle
       # Return the chemical content of the receptacle
       # @todo implemte or remove
       # @param
-      # @return [Array<Chemical::Aliquot>]
+      # @return [Array<Labware::Aliquot>]
       def content
         raise NotImplementedError
       end

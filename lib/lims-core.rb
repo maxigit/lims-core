@@ -3,7 +3,6 @@ require "lims-core/version"
 
 require 'lims/core/action'
 require 'lims/core/labware'
-require 'lims/core/chemical'
 require 'lims/core/data_release'
 require 'lims/core/funding'
 require 'lims/core/ordering'
@@ -20,9 +19,8 @@ module Lims
   #
   # The Core is split in the following submodule/namespace :
   # 1. {Labware} :
-  #    Inert things  used in the lab (plate, robots, tube, etc...).
-  # 2. {Chemical} :
-  #    Chemical substances and *reacting* things.
+  #    Things used/found in the lab. Includes pure labware (inert things as {Plate plates}, {Tube tubes})
+  #    and chemical one (as {Aliquot aliquots}, {Sample samples}.
   # 3. {LabProcess}
   #    Related to the work people/robot do in the laboratories.
   # 4. {Ordering} :

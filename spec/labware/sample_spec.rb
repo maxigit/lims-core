@@ -1,11 +1,11 @@
 # Spec requirements
-require 'chemical/spec_helper'
+require 'labware/spec_helper'
 require 'data_release/releasable_examples'
 
 # Model requirements
-require 'lims/core/chemical/sample'
+require 'lims/core/labware/sample'
 
-module Lims::Core::Chemical
+module Lims::Core::Labware
   describe Sample do
     it_behaves_like "releasable"
   end
