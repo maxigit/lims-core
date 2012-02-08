@@ -16,14 +16,14 @@ module Lims
   #
   # The Core is split in the following submodule/namespace :
   # 1. {Labware} :
-  #    Things used/found in the lab. Includes pure labware (inert things as {Plate plates}, {Tube tubes})
-  #    and chemical one (as {Aliquot aliquots}, {Sample samples}.
+  #    Things used/found in the lab. Includes pure labware (inert things as {Labware::Plate plates}, {Labware::Tube tubes})
+  #    and chemical one (as {Labware::Aliquot aliquots}, {Labware::Sample samples}).
   # 3. {LabProcess}
   #    Related to the work people/robot do in the laboratories.
   # 5. {Organization}
-  #    Related to {User users}, data release ({Study}) and ordering ({Order}) and funding ({Project}) etc.
+  #    Related to {User users}, data release ({Organization::Study studies}) and ordering ({Organization::Order orders}) and funding ({Organization::Project projects}) etc.
   # 10. {Actions}
-  #     High level action that can be performed on things (mostly labware).
+  #     High level {Actions::Action actions} that can be performed on things (mostly labware).
   #   
   # 12. {Persistence}
   #
