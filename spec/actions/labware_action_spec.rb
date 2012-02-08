@@ -1,6 +1,6 @@
-require 'action/spec_helper'
+require 'actions/spec_helper'
 
-require 'action/action_examples'
+require 'actions/action_examples'
 
 module Lims::Core::Action
   describe "Plate::Stamping" do

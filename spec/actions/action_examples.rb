@@ -1,4 +1,4 @@
-require 'action/spec_helper'
+require 'actions/spec_helper'
 
 shared_examples "an action" do
   it "has a user"

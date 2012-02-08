@@ -1,7 +1,7 @@
 require 'common'
 
 module Lims::Core
-  module Action
+  module Actions
     # This class represent the base class of all actions.
     # It needs a user, and will be wrapped within a transaction/{Session}
     # It will be probably a kind of functor, i.e. all the parameters are set at initialisation.
@@ -20,7 +20,7 @@ module Lims::Core
     #
     #     argument :source_plate, PlateProxy
     #   end
-    class Base
+    class Action
     end
   end
 end

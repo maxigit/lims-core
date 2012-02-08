@@ -1,7 +1,7 @@
 # vi: spell:spelllang=en ts=2:sts=2:sw=2:et
 require "lims-core/version"
 
-require 'lims/core/action'
+require 'lims/core/actions'
 require 'lims/core/labware'
 require 'lims/core/organization'
 
@@ -22,12 +22,11 @@ module Lims
   #    Related to the work people/robot do in the laboratories.
   # 5. {Organization}
   #    Related to {User users}, data release ({Study}) and ordering ({Order}) and funding ({Project}) etc.
-  # 5. {Auditing?} _*to validate*_ :
-  #    What changed in the database  (low level).
-  # 6. {Tracking} :
-  #    What happened in the lab.
-  # 10. {Action}
-  #    What people can do on things.
+  # 10. {Actions}
+  #     High level action that can be performed on things (mostly labware).
+  #   
+  # 12. {Persistence}
+  #
   #
   # This partition is more for clarity/documentation purposes and it's not meant to be really tight. 
   # However it's more likely than the submodules dependency will be a tree than a graph, (but it's not a necessity).   

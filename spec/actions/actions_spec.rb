@@ -1,4 +1,4 @@
 # Spec requirements
-require 'action/spec_helper'
+require 'actions/spec_helper'
 
 #model requirements
