@@ -1,7 +1,7 @@
 # Spec requirements
-require 'data_release/spec_helper'
+require 'organization/spec_helper'
 
-module Lims::Core::DataRelease
+module Lims::Core::Organization
   shared_examples "releasable" do
 
     it "should be releasable" do

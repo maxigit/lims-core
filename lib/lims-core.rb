@@ -3,10 +3,7 @@ require "lims-core/version"
 
 require 'lims/core/action'
 require 'lims/core/labware'
-require 'lims/core/data_release'
-require 'lims/core/funding'
-require 'lims/core/ordering'
-
+require 'lims/core/organization'
 
 # LIMS stands for Laboratory Information Management System.
 # A namespace.
@@ -23,16 +20,12 @@ module Lims
   #    and chemical one (as {Aliquot aliquots}, {Sample samples}.
   # 3. {LabProcess}
   #    Related to the work people/robot do in the laboratories.
-  # 4. {Ordering} :
-  #    What people do to ask something to be done.
+  # 5. {Organization}
+  #    Related to {User users}, data release ({Study}) and ordering ({Order}) and funding ({Project}) etc.
   # 5. {Auditing?} _*to validate*_ :
   #    What changed in the database  (low level).
   # 6. {Tracking} :
-  #    What happenened in the lab.
-  # 7. {DataRelease}
-  #    Releasing data to the outside world.
-  # 9. {Funding}
-  #    Related to billing and cost.
+  #    What happened in the lab.
   # 10. {Action}
   #    What people can do on things.
   #

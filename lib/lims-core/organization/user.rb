@@ -2,7 +2,7 @@
 require 'common'
 
 module Lims::Core
-  module Ordering
+  module Organization
     # A user. Anybody that can log into to the system.
     class User
     end

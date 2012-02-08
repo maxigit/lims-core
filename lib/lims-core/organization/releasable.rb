@@ -2,7 +2,7 @@
  require 'common'
 
  module Lims::Core
-   module DataRelease
+   module Organization
      module Releasable
        # Can be released to the outside world.
      end

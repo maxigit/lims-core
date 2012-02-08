@@ -2,7 +2,7 @@
 require 'common'
 
 module Lims::Core
-  module Funding
+  module Organization
     # A project corresponds to a source of funding.
     # It has a manager and {Quota quotas}.
     class Project

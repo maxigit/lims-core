@@ -2,9 +2,9 @@
 require 'common'
 
 module Lims::Core
-  module Ordering
+  module Organization
     # An order is what a project manager is asking for, typically
-    # some samples to be sequenced in a particular waysa sequence
+    # some samples to be sequenced in a particular way.
     class Order
     end
   end

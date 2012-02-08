@@ -2,7 +2,7 @@
 require 'common'
 
 module Lims::Core
-  module Funding
+  module Organization
     # Allowance for a specific type of work per {Project project}.
     # A quota should belong to a project and relate to something quotable.
     class Quota
