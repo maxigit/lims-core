@@ -20,7 +20,7 @@ module Lims::Core
           # a simple array is enough (no hash to compute)
           # @return [Array<Labware::Aliquot>]
           attribute :content, Array[Aliquot], :default => [], :writer => :private
-          def_delegators :content, :each, :<<, :size
+          def_delegators :content, :each, :[], :<<, :size
 
           def initialize(*args,&block)
             super(*args,&block)
@@ -29,7 +29,7 @@ module Lims::Core
 
           def add(aliquots)
             #todo merge identical aliquots
-            content.push(*aliquots) # content+= doesn't work. bug in Virtus
+            content.concat(aliquots)
           end
 
           # returns the total quantity of liquid present in the receptacle.

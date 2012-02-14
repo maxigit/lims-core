@@ -1,6 +1,8 @@
 # Spec requirements
 require 'labware/spec_helper'
 
+Lab=Lims::Core::Labware
+
 shared_examples "receptacle" do
   def self.its_chemical_content (spec, &block)
     spec_name = "has a chemical content which #{spec}"
@@ -22,15 +24,15 @@ shared_examples "receptacle" do
   end
 
   context "with a chemical content" do
-    subject { described_class.new.tap { |r| r << mock(:aliquot) } }
+    subject { described_class.new.tap { |r| r << Lab::Aliquot.new(:quantity=>10) } }
 
     it "can have a part of its content taken" do
-      subject.take_fraction(0.5).should be_kind_of(Array)
-      subject.size.should change_by 1
+      expect {
+        subject.take_fraction(0.3).should be_kind_of(Array)
+      }.to change {subject[0].quantity}.by(-3)
     end
 
-    it "can have all of its content taken" do
-      subject.take()
+    context "after having all of its content taken", :wipy => true do
       subject.content.should be_empty
     end
   end

@@ -34,6 +34,16 @@ module Lims::Core
 
       #validates_presence_of :quantity
       #validates_numericalness_of :quantity, :gte => 0
+
+      def take_fraction(fraction)
+        new = self.class.new(attributes)
+        if quantity
+          new_quantity = quantity*fraction
+          self.quantity -= new_quantity
+          new.quantity = new_quantity
+        end
+        return new
+      end
     end
   end
 end
