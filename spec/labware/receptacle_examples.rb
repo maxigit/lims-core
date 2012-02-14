@@ -10,9 +10,29 @@ shared_examples "receptacle" do
       it spec_name
     end
   end
-  it "has a chemical content"
-  its_chemical_content "can be removed partially"
-  its_chemical_content "can be removed totally"
-  it "can have a chemical content added to it"
+
+  it "can have a chemical content added to it" do
+    r = described_class.new
+    r.add([mock(:aliquot), mock(:aliquot)])
+  end
+
+  it "can have an aliquot added to it" do
+    r = described_class.new
+    r << mock(:aliquot)
+  end
+
+  context "with a chemical content" do
+    subject { described_class.new.tap { |r| r << mock(:aliquot) } }
+
+    it "can have a part of its content taken" do
+      subject.take_fraction(0.5).should be_kind_of(Array)
+      subject.size.should change_by 1
+    end
+
+    it "can have all of its content taken" do
+      subject.take()
+      subject.content.should be_empty
+    end
+  end
 end
 
