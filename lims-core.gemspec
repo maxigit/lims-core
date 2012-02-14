@@ -23,6 +23,8 @@ Gem::Specification.new do |s|
   # s.add_development_dependency "rspec"
   # s.add_runtime_dependency "rest-client"
   s.add_dependency('facets', '2.9.3')
+  s.add_dependency('virtus', '0.2.0')
+  s.add_dependency('aequitas')
 
   #development
   s.add_development_dependency('rspec', '~> 2.8.0')

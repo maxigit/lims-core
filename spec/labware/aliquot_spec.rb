@@ -7,14 +7,27 @@ require 'lims/core/labware/aliquot'
 module Lims::Core::Labware
   describe Aliquot do
     context "to be valid" do
-      it "should have an owner"
-      it "should have type" do
-        # this is an example to mostly test yard-rspec.
-        a = Aliquot.new
-        a.type=nil
-        a.valid?.should fail_with("todo")
+      let (:aliquot) {Aliquot.new(:quantity=>10)}
+
+      it "must have everything needed" do
+        aliquot.valid?.should be_true
       end
-      it "should have a quantity"
+      it "must have an owner"
+      it "must have a type" do
+        # this is an example to mostly test yard-rspec.
+        aliquot.type=nil
+        aliquot.valid?.should fail_with("todo")
+      end
+      it "must have a quantity" do
+        aliquot.quantity=nil
+        aliquot.valid?.should eq false
+      end
+
+      it "must have a positive quantity" do
+        aliquot.quantity=-5
+        aliquot.valid?.should  be_false
+      end
+
       it "should be in a receptacle"
       it "can't be empty"
     end

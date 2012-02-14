@@ -2,7 +2,7 @@
 require 'labware/spec_helper'
 
 shared_examples "located" do
-  it "has a location"
+  it "requires a location"
 end
 
 shared_examples "movable" do

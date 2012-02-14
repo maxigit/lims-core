@@ -7,6 +7,9 @@ module Lims::Core
     # The core doesn't need to care about 'individual',
     # it just store metadata (like organism, gender, etc ...).
    class Sample
+     include Virtus
+     include Aequitas
+     attribute :name, String, :required => true
    end
   end 
 end
