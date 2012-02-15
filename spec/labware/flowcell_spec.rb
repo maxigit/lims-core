@@ -12,7 +12,20 @@ module Lims::Core::Labware
     it_behaves_like "located" 
     context "contains lanes" do
       it_behaves_like "a container", Lane
+      its(:size) { should eq(8) } 
+
+      it "can have a content put in one lane" do
+        aliquot = mock(:aliquot)
+        subject[0] << aliquot
+        subject[0].should include(aliquot)
+      end
+      it "can have an aliquot added in one lane" do
+        aliquot = mock(:aliquot)
+        subject[0] << aliquot
+        subject[0].should include(aliquot)
+      end
     end
     it_behaves_like "labellable"
+
   end
 end
