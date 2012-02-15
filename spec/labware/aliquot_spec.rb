@@ -13,10 +13,10 @@ module Lims::Core::Labware
         aliquot.valid?.should be_true
       end
       it "must have an owner"
-      it "must have a type" do
+      xit "must have a type" do
         # this is an example to mostly test yard-rspec.
         aliquot.type=nil
-        aliquot.valid?.should fail_with("todo")
+        aliquot.valid?.should be_false
       end
       it "must have a quantity" do
       pending "we might use nil quanity for unknown quantity" do
