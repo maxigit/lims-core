@@ -19,8 +19,10 @@ module Lims::Core::Labware
         aliquot.valid?.should fail_with("todo")
       end
       it "must have a quantity" do
+      pending "we might use nil quanity for unknown quantity" do
         aliquot.quantity=nil
         aliquot.valid?.should eq false
+      end
       end
 
       it "must have a positive quantity" do
