@@ -14,9 +14,15 @@ module Lims::Core
 
      include Virtus
           extend Forwardable
-     attribute :content, Array[Lane], :default => lambda { |c,a| 8.times.map { a.member_type.new }}, :writer => :protected
-     def_delegators :content, :each, :[], :size 
+     attribute :content, Array[Lane], :default => lambda { |f,a| 8.times.map { l=a.member_type.new; l.send(:flowcell=, f); l }}, :writer => :protected
+     def_delegators :content, :each, :size 
 
+          def [](i)
+            case i
+            when Integer then self.content[i]
+            else super(i)
+            end
+          end
      # iterate only between non empty lanes.
      # @yield [content]
      # @return itself

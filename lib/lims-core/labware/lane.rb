@@ -1,4 +1,7 @@
 require 'lims/core/labware/receptacle.rb'
+
+class Flowcell
+end
 module Lims::Core
 
   module Labware
@@ -6,6 +9,8 @@ module Lims::Core
     # Contains some chemical substances.
     class Lane
       include Receptacle
+      include Virtus
+      attribute :flowcell, Flowcell, :writer => :protected
     end
   end
 end
