@@ -19,10 +19,10 @@ module Lims::Core
           # Ideally, it should be a set. However for performance reason
           # a simple array is enough (no hash to compute)
           # @return [Array<Labware::Aliquot>]
-           attribute :quantity, Integer
           attribute :content, Array[Aliquot], :default => [], :writer => :protected
           def_delegators :content, :each, :<<, :size, :empty?, :include?
 
+           #attribute :quantity, Integer
           def [](i)
             case i
             when Integer then self.content[i]
@@ -40,7 +40,7 @@ module Lims::Core
           # @todo to be correct we need the actual quantity of water AND of chemical substance.
           # @return Float
           def quantity
-            content.inject(0) { |q, a| q+a.quantity }
+            content.inject(0) { |q, a| a.quantity && q ?  q+a.quantity : nil }
           end
 
           # Takes (removes) a specified amount of each aliquots (proportionally)

@@ -15,7 +15,7 @@ module Lims::Core
      include Virtus
           extend Forwardable
      attribute :content, Array[Lane], :default => lambda { |f,a| 8.times.map { l=a.member_type.new; l.send(:flowcell=, f); l }}, :writer => :protected
-     def_delegators :content, :each, :size 
+     def_delegators :content, :each, :size , :each_with_index
 
           def [](i)
             case i
