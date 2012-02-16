@@ -19,8 +19,16 @@ module Lims::Core
           # Ideally, it should be a set. However for performance reason
           # a simple array is enough (no hash to compute)
           # @return [Array<Labware::Aliquot>]
+           attribute :quantity, Integer
           attribute :content, Array[Aliquot], :default => [], :writer => :protected
-          def_delegators :content, :each, :[], :<<, :size, :empty?, :include?
+          def_delegators :content, :each, :<<, :size, :empty?, :include?
+
+          def [](i)
+            case i
+            when Integer then self.content[i]
+            else super(i)
+            end
+          end
 
           def add(aliquots)
             #todo merge identical aliquots
