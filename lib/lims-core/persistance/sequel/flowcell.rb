@@ -12,6 +12,12 @@ module Lims::Core
         def table_name
           :flowcells
         end
+
+        def save_children(id, child)
+        each_with_index do |lane, position|
+            session.save(lane, id, position)
+          end
+        end
       end
     end
   end

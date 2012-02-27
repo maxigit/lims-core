@@ -25,22 +25,29 @@ module Lims::Core
           self.class::Model
         end
 
+        def dataset
+          @session.database[model]
+        end
+
         # save an object and return is id or nil if failure
         # @return [Boolean, Nil]
-        def save(object)
-          @session.database[table_name].insert(object.attributes)
+        def save(object, *params)
+          id = dataset.insert(object.attributes)
+          save_children(id, object)
+        end
+        def save_children(id, object)
         end
 
         # Load a model by id
         def [](id)
           case id
           when Fixnum
-          load_single_model(id)
+            load_single_model(id)
           end
         end
-        
+
         def load_single_model(id)
-          model.new(@session.dabase[table_name][:id => id]).tap do |m|
+          model.new(dataset[:id => id]).tap do |m|
             load_children(id, m)
           end
         end

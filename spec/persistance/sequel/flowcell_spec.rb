@@ -12,12 +12,12 @@ PS=Lims::Core::Persistance::Sequel
 module Lims::Core
   describe Labware::Flowcell do
     include_context "prepare tables"
-    before (:all) { prepare_table(::Sequel.sqlite('')) }
+    before (:all) { prepare_table(@db=::Sequel.sqlite('')) }
 
     include_context "flowcell factory"
 
     context "created within a session" do
-      let(:store) { PS::Store.new(::Sequel.sqlite('')) }
+      let(:store) { PS::Store.new(@db) }
 
       it "should be savable" do
 
