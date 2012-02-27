@@ -36,14 +36,11 @@ module Lims::Core
 
         # Create a session and pass it to the block.
         # This is the only way to get a session.
-        # @param  Array
+        # @param [Array]
         # @yieldparam [Session] session the created session.
         # @return the value of the block
         def with_session(*params, &block)
-          session = create_session(*params)
-          yield(session).tap do
-            session.save_all
-          end
+          create_session(*params).with_session(&block)
         end
 
 

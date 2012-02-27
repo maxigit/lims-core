@@ -1,5 +1,6 @@
 require 'lims/core/labware/container'
 require 'lims/core/labware/lane'
+require 'lims/core/resource'
 
 require 'forwardable'
 
@@ -11,18 +12,10 @@ module Lims::Core
     class Flowcell
      #include Container
      #contains Lane
-
-     include Virtus
-          extend Forwardable
-     attribute :content, Array[Lane], :default => lambda { |f,a| 8.times.map { l=a.member_type.new; l.send(:flowcell=, f); l }}, :writer => :protected
-     def_delegators :content, :each, :size , :each_with_index
-
-          def [](i)
-            case i
-            when Integer then self.content[i]
-            else super(i)
-            end
-          end
+      include Resource
+      is_array_of Lane do |f,t|
+        8.times.map { l=t.new; l.send(:flowcell=, f); l }
+      end
      # iterate only between non empty lanes.
      # @yield [content]
      # @return itself

@@ -12,7 +12,7 @@ module Lims::Core
       class Session < Persistance::Session
 
         def flowcell
-          @flowcell ||= @store.base_module::Flowcell.new
+          @flowcell ||= @store.base_module::Flowcell.new(self)
         end
       end
     end

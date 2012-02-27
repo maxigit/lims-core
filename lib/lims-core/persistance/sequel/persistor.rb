@@ -16,16 +16,36 @@ module Lims::Core
           end
         end
 
+        def initialize (session, *args, &block)
+          @session = session
+          super(*args, &block)
+        end
         #Returns the associate class
         def model
           self.class::Model
         end
 
-        def save
+        # save an object and return is id or nil if failure
+        # @return [Boolean, Nil]
+        def save(object)
+          @session.database[table_name].insert(object.attributes)
         end
 
         # Load a model by id
         def [](id)
+          case id
+          when Fixnum
+          load_single_model(id)
+          end
+        end
+        
+        def load_single_model(id)
+          model.new(@session.dabase[table_name][:id => id]).tap do |m|
+            load_children(id, m)
+          end
+        end
+
+        def load_children(id, m)
         end
       end
     end
