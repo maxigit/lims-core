@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency('virtus', '0.2.0')
   s.add_dependency('aequitas')
   s.add_dependency('sequel')
+  s.add_dependency('active_support')
 
   #development
   s.add_development_dependency('rspec', '~> 2.8.0')

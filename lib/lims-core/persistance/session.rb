@@ -31,6 +31,11 @@ module Lims::Core
         def << (object)
           object
         end
+
+        # save all objects which needs to be
+        def save_all()
+        end
+
       end
     end
 end

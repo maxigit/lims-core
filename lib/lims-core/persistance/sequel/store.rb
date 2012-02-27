@@ -1,6 +1,7 @@
 # vi: ts=2:sts=2:et:sw=2
 
 require 'lims/core/persistance/store'
+require 'lims/core/persistance/sequel/session'
 require 'sequel'
 
 module Lims::Core
@@ -19,7 +20,6 @@ module Lims::Core
           @database = database
           super(*args)
         end
-
       end
     end
   end
