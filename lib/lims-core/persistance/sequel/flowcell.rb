@@ -13,9 +13,9 @@ module Lims::Core
           :flowcells
         end
 
-        def save_children(id, child)
-        each_with_index do |lane, position|
-            session.save(lane, id, position)
+        def save_children(id, subject)
+          subject.each_with_index do |lane, position|
+            @session.save(lane, id, position)
           end
         end
       end

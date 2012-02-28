@@ -26,7 +26,7 @@ module Lims::Core
         end
 
         def dataset
-          @session.database[model]
+          @session.database[table_name]
         end
 
         # save an object and return is id or nil if failure

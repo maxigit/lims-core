@@ -21,13 +21,15 @@ module Lims::Core
 
       it "should be savable" do
 
-        flowcell =  flowcell_with_samples(3)
-        flowcell_id = store.with_session do |session|
-          session << flowcell
+        @flowcell =  flowcell_with_samples(3)
+        store.with_session do |session|
+          session << @flowcell
         end
 
         store.with_session do |session|
-          session.flowcell[flowcell_id].should be === flowcell
+          flowcell_id = session.flowcell.id_for(@flowcell)
+
+          session.flowcell[flowcell_id].should be === @flowcell
         end
 
       end

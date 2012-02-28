@@ -13,8 +13,8 @@ module Lims::Core
           :lanes
         end
 
-        def save(object, flowcell_id, position)
-          each do |aliquot|
+        def save(subject, flowcell_id, position)
+          subject.each do |aliquot|
             aliquot_id = @session.save(aliquot)
             dataset.insert(:flowcell_id => flowcell_id,
                            :position => position,

@@ -1,5 +1,6 @@
 # vi: ts=2:sts=2:et:sw=2
 
+require 'common'
 require 'forwardable'
 
 
@@ -47,27 +48,44 @@ module Lims::Core
           @objects << object
         end
 
-        private
         # save the object in real.
-        # To mark un object as 'to save' use the `<<` method
+        # To mark an object as 'to save' use the `<<` method
+        # Note we can't make this method private because, the persistor
+        # need it to save their children. To solve this, we raise an exception if it's inside a sess
         # @return [Boolean]
-        def save(object)
+        def save(object, *options)
+          raise RuntimeError, "Can't save object inside a session. Please considere the << methods." unless @save_in_progress
           return if @saved.include?(object)
           @saved << object
 
-          persistor_for(object).save(object)
+          persistor_for(object).save(object, *options)
         end
 
+        def method_missing(name, *args, &block)
+          persistor_for(name) || super(name, *args, &block)
+        end
+
+        private
         # save all objects which needs to be
         def save_all()
+          @save_in_progress = true # allows saving
           @objects.each do |object|
             save(object)
           end
+          @save_in_progress = false
         end
 
         def persistor_for(object)
-          name = object.class.name.split('::').pop
-          send(name.underscore)
+          persistor_class_for(object).try(:new, self)
+        end
+
+        def  persistor_class_for(object)
+          name = case object
+            when String then object
+            when Symbol then object.to_s
+            else object.class.name.split('::').pop
+            end
+          @store.base_module.const_get(name.upper_camelcase)
         end
       end
     end
