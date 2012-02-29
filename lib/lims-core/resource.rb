@@ -19,13 +19,14 @@ module Lims::Core
               @content 
             end
 
-            def_delegators :@content, :each, :size , :each_with_index
+            def_delegators :@content, :each, :size , :each_with_index, :map, :zip
             def [](i)
               case i
               when Integer then self.content[i]
               else super(i)
               end
             end
+
             # iterate only between non empty lanes.
             # @yield [content]
             # @return itself

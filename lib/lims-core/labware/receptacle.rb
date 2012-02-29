@@ -20,7 +20,7 @@ module Lims::Core
           # a simple array is enough (no hash to compute)
           # @return [Array<Labware::Aliquot>]
           attribute :content, Array[Aliquot], :default => [], :writer => :protected
-          def_delegators :content, :each, :<<, :size, :empty?, :include?
+          def_delegators :content, :each, :<<, :size, :empty?, :include?, :map, :zip
 
            #attribute :quantity, Integer
           def [](i)
