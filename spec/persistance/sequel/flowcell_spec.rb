@@ -12,28 +12,29 @@ PS=Lims::Core::Persistance::Sequel
 module Lims::Core
   describe Labware::Flowcell do
     include_context "prepare tables"
-    before (:all) { prepare_table(@db=::Sequel.sqlite('')) }
+    let(:db) { ::Sequel.sqlite('') }
+    before (:each) { prepare_table(db) }
 
     include_context "flowcell factory"
 
     context "created within a session" do
-      let(:store) { PS::Store.new(@db) }
-
-      it "should be savable" do
-
-        flowcell = store.with_session do |session|
+      let(:store) { PS::Store.new(db) }
+      let(:flowcell) do
+        store.with_session do |session|
           flowcell_with_samples(3).tap do |f|
             session << f
           end
         end
+      end
+      before(:each) { flowcell }
 
+      it "should be savable" do
         store.with_session do |session|
           # Hack to find last id
           flowcell_id = session.flowcell.dataset.order_by(:id).last[:id]
 
           flowcell.should eq(session.flowcell[flowcell_id])
         end
-
       end
     end
   end
