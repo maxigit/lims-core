@@ -1,4 +1,5 @@
 require 'lims/core/labware/receptacle.rb'
+require 'lims/core/resource'
 
 class Flowcell
 end
@@ -8,8 +9,8 @@ module Lims::Core
     # A lane on a {Flowcell flowcell}.
     # Contains some chemical substances.
     class Lane
+      include Resource
       include Receptacle
-      include Virtus
       attribute :flowcell, Flowcell, :writer => :protected
     end
   end

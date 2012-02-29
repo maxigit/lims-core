@@ -1,8 +1,10 @@
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en  
 require 'common'
 
+
 require 'lims/core/labware/sample'
 require 'lims/core/labware/tag'
+require 'lims/core/resource'
 
 module Lims::Core
   module Labware
@@ -22,8 +24,7 @@ module Lims::Core
     # At the moment, rather than allowing an aliquot to have many constituents (in a free form way),
     # an aliquot can be formed of at least a {Labware::Sample sample}, a {Labware::Tag tag} and  or a {Labware::BaitLibrary bait library}.
     class Aliquot
-      include Virtus
-      include Aequitas
+      include Resource
       attribute :sample, Sample
       attribute :tag, Tag
       # @todo add a unit to quantity

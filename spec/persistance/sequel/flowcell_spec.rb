@@ -21,23 +21,17 @@ module Lims::Core
 
       it "should be savable" do
 
-        flowcell =  flowcell_with_samples(3)
-        store.with_session do |session|
-          session << flowcell
+        flowcell = store.with_session do |session|
+          flowcell_with_samples(3).tap do |f|
+            session << f
+          end
         end
 
         store.with_session do |session|
-          # Hack to find
-          debugger
+          # Hack to find last id
           flowcell_id = session.flowcell.dataset.order_by(:id).last[:id]
 
           flowcell.should eq(session.flowcell[flowcell_id])
-          flowcell.zip(session.flowcell[flowcell_id]) do |l1, l2|
-            l1.size.should eq(l2.size)
-            l1.zip(l2) do |a1, a2|
-              a1.sample.should eq(a2.sample)
-            end
-          end
         end
 
       end

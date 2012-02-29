@@ -2,8 +2,6 @@ require 'lims/core/labware/container'
 require 'lims/core/labware/lane'
 require 'lims/core/resource'
 
-require 'forwardable'
-
 module Lims::Core
   module Labware
     # A flowcell with some lanes.

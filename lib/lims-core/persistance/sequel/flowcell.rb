@@ -9,13 +9,22 @@ module Lims::Core
       # Not a flowcell but a flowcell persistor.
       class Flowcell < Persistance::Flowcell
         include Sequel::Persistor
-        def table_name
+        def self.table_name
           :flowcells
         end
 
-        def save_children(id, subject)
-          subject.each_with_index do |lane, position|
+        def save_children(id, flowcell)
+          flowcell.each_with_index do |lane, position|
             @session.save(lane, id, position)
+          end
+        end
+
+        def load_children(id, flowcell)
+          Lane::dataset(@session).join(Aliquot::dataset(@session), :id => :aliquot_id).filter(:flowcell_id => id).each do |att|
+            position = att.delete(:position)
+            att.delete(:id)
+            aliquot  = Aliquot::Model.new(att)
+            flowcell[position] << aliquot
           end
         end
       end

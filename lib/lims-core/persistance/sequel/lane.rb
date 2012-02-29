@@ -9,12 +9,13 @@ module Lims::Core
       # Not a lane but a lane persistor.
       class Lane < Persistance::Lane
         include Sequel::Persistor
-        def table_name
+        def self.table_name
           :lanes
         end
 
-        def save(subject, flowcell_id, position)
-          subject.each do |aliquot|
+        def save(lane, flowcell_id, position)
+          #todo bulk save if needed
+          lane.each do |aliquot|
             aliquot_id = @session.save(aliquot)
             dataset.insert(:flowcell_id => flowcell_id,
                            :position => position,

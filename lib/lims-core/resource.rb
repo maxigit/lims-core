@@ -15,6 +15,12 @@ module Lims::Core
             end
 
           class_eval do
+
+            # Add content to compare
+            def ==(other)
+              super(other) && other.respond_to?(:content) && content == other.content
+            end
+
             def content
               @content 
             end
@@ -38,6 +44,15 @@ module Lims::Core
           end 
         end
       end
+    end
+
+    # Compare 2 resources.
+    # They are == if they have the same values (attributes),
+    # regardless they are the same ruby object or not.
+    # @param other
+    # @return [Boolean]
+    def ==(other)
+      self.attributes == other.attributes
     end
   end
 end
