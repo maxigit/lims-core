@@ -12,7 +12,7 @@ module Lims::Core
      #contains Lane
       include Resource
       is_array_of Lane do |f,t|
-        8.times.map { l=t.new; l.send(:flowcell=, f); l }
+        8.times.map { t.new }
       end
      # iterate only between non empty lanes.
      # @yield [content]

@@ -9,9 +9,7 @@ module Lims::Core
     # A lane on a {Flowcell flowcell}.
     # Contains some chemical substances.
     class Lane
-      include Resource
       include Receptacle
-      attribute :flowcell, Flowcell, :writer => :protected
 
       def to_s()
         content.to_s

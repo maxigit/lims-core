@@ -18,8 +18,7 @@ module Lims::Core
 
             # Add content to compare
             def ==(other)
-
-              super(other) && other.respond_to?(:content) && content == other.content
+              super(other) && content = (other.respond(:content) || other)
             end
 
             def content

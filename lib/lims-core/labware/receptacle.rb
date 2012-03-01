@@ -1,6 +1,7 @@
 # vi: ts=2 sts=2 et sw=2 spell spelllang=en  
 require 'common'
 require 'lims/core/labware/aliquot'
+require 'lims/core/resource'
 
 require 'forwardable'
 
@@ -13,22 +14,9 @@ module Lims::Core
 
       def self.included(klass)
         klass.class_eval do
-          include Virtus
-          extend Forwardable
-          # Return the chemical content of the receptacle
-          # Ideally, it should be a set. However for performance reason
-          # a simple array is enough (no hash to compute)
-          # @return [Array<Labware::Aliquot>]
-          attribute :content, Array[Aliquot], :default => [], :writer => :protected
-          def_delegators :content, :each, :<<, :size, :empty?, :include?, :map, :zip, :clear
+          include Resource
 
-           #attribute :quantity, Integer
-          def [](i)
-            case i
-            when Integer then self.content[i]
-            else super(i)
-            end
-          end
+          is_array_of(Aliquot){ |l,t| Array.new }
 
           def add(aliquots)
             #todo merge identical aliquots
