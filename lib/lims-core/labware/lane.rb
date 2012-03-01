@@ -12,6 +12,10 @@ module Lims::Core
       include Resource
       include Receptacle
       attribute :flowcell, Flowcell, :writer => :protected
+
+      def to_s()
+        content.to_s
+      end
     end
   end
 end

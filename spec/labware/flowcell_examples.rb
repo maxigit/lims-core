@@ -6,7 +6,7 @@ require 'spec_helper'
 require 'lims/core/labware/flowcell'
 
 shared_context "flowcell factory" do
-  def flowcell_with_samples(sample_nb=5)
+  def new_flowcell_with_samples(sample_nb=5)
     Flowcell.new.tap do |flowcell|
       flowcell.each_with_index do |lane, i|
         1.upto(sample_nb) do |j|
@@ -16,7 +16,7 @@ shared_context "flowcell factory" do
     end
   end
 
-  def empty_flowcell
+  def new_empty_flowcell
     Flowcell.new
   end
 end

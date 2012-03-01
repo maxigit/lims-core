@@ -20,7 +20,7 @@ module Lims::Core
           # a simple array is enough (no hash to compute)
           # @return [Array<Labware::Aliquot>]
           attribute :content, Array[Aliquot], :default => [], :writer => :protected
-          def_delegators :content, :each, :<<, :size, :empty?, :include?, :map, :zip
+          def_delegators :content, :each, :<<, :size, :empty?, :include?, :map, :zip, :clear
 
            #attribute :quantity, Integer
           def [](i)
@@ -33,6 +33,10 @@ module Lims::Core
           def add(aliquots)
             #todo merge identical aliquots
             content.concat(aliquots)
+          end
+
+          def <<(e)
+            tap { content << e }
           end
 
           # returns the total quantity of liquid present in the receptacle.

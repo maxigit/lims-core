@@ -18,6 +18,7 @@ module Lims::Core
 
             # Add content to compare
             def ==(other)
+
               super(other) && other.respond_to?(:content) && content == other.content
             end
 
@@ -25,7 +26,8 @@ module Lims::Core
               @content 
             end
 
-            def_delegators :@content, :each, :size , :each_with_index, :map, :zip
+            def_delegators :@content, :each, :size , :each_with_index, :map, :zip, :clear, :empty?, :to_s
+
             def [](i)
               case i
               when Integer then self.content[i]
@@ -52,7 +54,8 @@ module Lims::Core
     # @param other
     # @return [Boolean]
     def ==(other)
-      self.attributes == other.attributes
+      debugger if $stop
+      self.attributes == (other.respond(:attributes) || {} )
     end
   end
 end
