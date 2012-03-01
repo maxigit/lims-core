@@ -38,9 +38,18 @@ module Lims::Core::Persistance
       it "should not fail when mapping it again" do
         expect { subject.map_id_object(id, object) }.not_to raise_error(IdentityMap::DuplicateError)
       end
+
+      it "should yield the object" do
+        subject.object_for(id) do |o|
+          o.should == object
+        end
+      end
+
+      it "should not yield if the object can't be found" do
+        subject.object_for("wrong id") do |o|
+          raise "not found"
+        end.should be_nil
+      end
     end
-
-
-
   end
 end
