@@ -4,6 +4,7 @@ require "lims-core/version"
 require 'lims/core/actions'
 require 'lims/core/labware'
 require 'lims/core/organization'
+require 'lims/core/persistance'
 
 # LIMS stands for Laboratory Information Management System.
 # A namespace.
@@ -25,7 +26,7 @@ module Lims
   # 10. {Actions}
   #     High level {Actions::Action actions} that can be performed on things (mostly labware).
   #   
-  # 12. {Persistence}
+  # 12. {Persistance}
   #
   #
   # This partition is more for clarity/documentation purposes and it's not meant to be really tight. 

@@ -12,7 +12,8 @@ require 'logger'
 DB = Sequel.sqlite '', :logger => Logger.new($stdout) 
 PS=Lims::Core::Persistance::Sequel
 module Lims::Core
-  describe Labware::Flowcell do
+  
+  describe "Sequel#Flowcell " do
     include_context "prepare tables"
     let(:db) { ::Sequel.sqlite('') }
     let(:store) { PS::Store.new(db) }
@@ -72,7 +73,7 @@ module Lims::Core
             flowcell[1]<< aliquot
           end
         end
-        it "should be saved", :focus => true do
+        it "should be saved" do
           store.with_session do |session|
             f = session.flowcell[flowcell_id]
             f[7].should == []
@@ -90,7 +91,7 @@ module Lims::Core
           flowcell[0].clear
           flowcell[1]<< aliquot
         end
-        it "should not be saved", :focus => true do
+        it "should not be saved" do
           store.with_session do |session|
             f = session.flowcell[flowcell_id]
             f[7].should == []

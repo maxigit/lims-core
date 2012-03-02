@@ -64,7 +64,7 @@ module Lims::Core
         end
 
         # save an object and return is id or nil if failure
-        # @return [Boolean, Nil]
+        # @return [Fixnum, nil]
         def save(object, *params)
           id_for(object) { |id| update(object, id, *params) } ||
             map_id_object(save_new(object, *params) , object)
