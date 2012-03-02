@@ -17,19 +17,27 @@ module Lims::Core
           class_eval do
 
             # Add content to compare
+            # @param other to compare with
+            # @return [Boolean]
             def ==(other)
-              super(other) && content = (other.respond(:content) || other)
+              super(other) && content == (other.respond(:content) || other)
             end
 
+            # The underlying array. Use to everything which is not directly delegated 
+            # @return [Array]
             def content
               @content 
             end
 
             def_delegators :@content, :each, :size , :each_with_index, :map, :zip, :clear, :empty?, :to_s
 
+            # Delegate [] to the underlying array.
+            # This is needed because Virtus redefine [] as well 
+            # @param [Fixnum, ... ] i index
+            # @return [Object]
             def [](i)
               case i
-              when Integer then self.content[i]
+              when Fixnum then self.content[i]
               else super(i)
               end
             end
@@ -53,7 +61,6 @@ module Lims::Core
     # @param other
     # @return [Boolean]
     def ==(other)
-      debugger if $stop
       self.attributes == (other.respond(:attributes) || {} )
     end
   end

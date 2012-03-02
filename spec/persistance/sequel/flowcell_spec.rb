@@ -8,6 +8,8 @@ require 'persistance/sequel/store_shared'
 require 'lims/core/persistance/sequel/store'
 require 'lims/core/labware/flowcell'
 
+require 'logger'
+DB = Sequel.sqlite '', :logger => Logger.new($stdout) 
 PS=Lims::Core::Persistance::Sequel
 module Lims::Core
   describe Labware::Flowcell do
@@ -62,7 +64,7 @@ module Lims::Core
       end
       let(:flowcell_id) { store.with_session { |session| @flowcell_id = last_flowcell_id(session) } }
 
-      context "when modified" do
+      context "when modified within a session" do
         before do
           store.with_session do |s|
             flowcell = s.flowcell[flowcell_id]
@@ -70,14 +72,30 @@ module Lims::Core
             flowcell[1]<< aliquot
           end
         end
-        it "should be saved" do
+        it "should be saved", :focus => true do
           store.with_session do |session|
-            debugger
             f = session.flowcell[flowcell_id]
             f[7].should == []
             f[1].should == [aliquot]
             f[0].should == []
             f[0].should be_empty
+          end
+        end
+      end
+      context "when modified outside a session" do
+        before do
+          flowcell = store.with_session do |s|
+            s.flowcell[flowcell_id]
+          end
+          flowcell[0].clear
+          flowcell[1]<< aliquot
+        end
+        it "should not be saved", :focus => true do
+          store.with_session do |session|
+            f = session.flowcell[flowcell_id]
+            f[7].should == []
+            f[1].should == []
+            f[0].should == [aliquot]
           end
         end
       end

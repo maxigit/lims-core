@@ -19,6 +19,7 @@ module Lims::Core
           @objects = Set.new
           @in_session = false
           @saved = Set.new
+          @persistor_map = {}
         end
 
         def_delegators :@store, :database
@@ -65,27 +66,41 @@ module Lims::Core
           persistor_for(name) || super(name, *args, &block)
         end
 
+        # Called by Persistor to inform the session
+        # about the loading of an object.
+        # MUST be called by persistors creating Resources.
+        def on_object_load(object)
+          self << object
+        end
+
         private
         # save all objects which needs to be
         def save_all()
           @save_in_progress = true # allows saving
           @objects.each do |object|
+            debugger
             save(object)
           end
           @save_in_progress = false
         end
 
+        # Get the persistor corresponding to the object class
+        # @param [Resource] object
+        # @return [Persistor, nil]
         def persistor_for(object)
-          persistor_class_for(object).try(:new, self)
+          name = persistor_name_for(object)
+          @persistor_map[name]  ||= @store.base_module.const_get(name).try(:new, self)
         end
 
-        def  persistor_class_for(object)
-          name = case object
-            when String then object
-            when Symbol then object.to_s
-            else object.class.name.split('::').pop
-            end
-          @store.base_module.const_get(name.upper_camelcase)
+        # Compute the class name of the persistor corresponding to the argument
+        # @param [Resource]
+        # @return [String]
+        def  persistor_name_for(object)
+          case object
+          when String then object
+          when Symbol then object.to_s
+          else object.class.name.split('::').pop
+          end.upper_camelcase
         end
       end
     end
