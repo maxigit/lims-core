@@ -9,7 +9,7 @@ module Lims::Core::Labware
     context "to be valid" do
       let (:aliquot) {Aliquot.new(:quantity=>10)}
 
-      it "must have everything needed" do
+      xit "must have everything needed" do
         aliquot.valid?.should be_true
       end
       it "must have an owner"
@@ -25,7 +25,7 @@ module Lims::Core::Labware
       end
       end
 
-      it "must have a positive quantity" do
+      xit "must have a positive quantity" do
         aliquot.quantity=-5
         aliquot.valid?.should  be_false
       end

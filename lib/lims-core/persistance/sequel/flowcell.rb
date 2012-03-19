@@ -41,7 +41,7 @@ module Lims::Core
           Lane::dataset(@session).join(Aliquot::dataset(@session), :id => :aliquot_id).filter(:flowcell_id => id).each do |att|
             position = att.delete(:position)
             att.delete(:id)
-            aliquot  = object_for(att[:aliquot_id]) || Aliquot::Model.new(att)
+            aliquot  = @session.aliquot[:aliquot_id] || Aliquot::Model.new(att)
             flowcell[position] << aliquot
           end
         end

@@ -78,7 +78,6 @@ module Lims::Core
         def save_all()
           @save_in_progress = true # allows saving
           @objects.each do |object|
-            debugger
             save(object)
           end
           @save_in_progress = false

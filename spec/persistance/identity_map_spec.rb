@@ -24,7 +24,7 @@ module Lims::Core::Persistance
       end
 
       it "should find the id by object" do
-        subject.object_for(object).should == id
+        subject.id_for(object).should == id
       end
 
       it "should fail when mapping another object with the same id" do
