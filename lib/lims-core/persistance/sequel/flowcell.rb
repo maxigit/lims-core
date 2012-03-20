@@ -26,6 +26,19 @@ module Lims::Core
                              :aliquot_id  => aliquot_id)
             end
           end
+
+          # Do a bulk load of aliquot and pass each of a block
+          # @param flowcell_id the id of the flowcell to load.
+          # @yield_param [Integer] position
+          # @yield_param [Aliquot] aliquot
+          def load_aliquots(flowcell_id)
+            Lane::dataset(@session).join(Aliquot::dataset(@session), :id => :aliquot_id).filter(:flowcell_id => flowcell_id).each do |att|
+              position = att.delete(:position)
+              att.delete(:id)
+              aliquot  = @session.aliquot[:aliquot_id] || Aliquot::Model.new(att)
+              yield(position, aliquot)
+            end
+          end
         end #class Lane
 
         def self.table_name
@@ -50,6 +63,10 @@ module Lims::Core
           Lane::dataset(@session).filter(:flowcell_id => id).delete
         end
 
+        def lane
+          @session.send("Flowcell::Lane")
+        end
+
         # Load all children of the given flowcell
         # Loaded object are automatically added to the session.
         # @param [Fixnum] id the id in the database
@@ -57,10 +74,7 @@ module Lims::Core
         # @return [Laboratory::Flowcell, nil] 
         #
         def load_children(id, flowcell)
-          Lane::dataset(@session).join(Aliquot::dataset(@session), :id => :aliquot_id).filter(:flowcell_id => id).each do |att|
-            position = att.delete(:position)
-            att.delete(:id)
-            aliquot  = @session.aliquot[:aliquot_id] || Aliquot::Model.new(att)
+          lane.load_aliquots(id) do |position, aliquot|
             flowcell[position] << aliquot
           end
         end
