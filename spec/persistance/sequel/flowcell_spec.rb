@@ -76,9 +76,8 @@ module Lims::Core
         it "should be saved" do
           store.with_session do |session|
             f = session.flowcell[flowcell_id]
-            f[7].should == []
+            f[7].should be_empty
             f[1].should == [aliquot]
-            f[0].should == []
             f[0].should be_empty
           end
         end
@@ -94,8 +93,8 @@ module Lims::Core
         it "should not be saved" do
           store.with_session do |session|
             f = session.flowcell[flowcell_id]
-            f[7].should == []
-            f[1].should == []
+            f[7].should be_empty
+            f[1].should be_empty
             f[0].should == [aliquot]
           end
         end
