@@ -1,15 +1,15 @@
 # vi: ts=2 sts=2 et sw=2 spell spelllang=en  
 require 'common'
-require 'lims/core/labware/aliquot'
+require 'lims/core/laboratory/aliquot'
 require 'lims/core/resource'
 
 require 'forwardable'
 
 module Lims::Core
-  module Labware
-    # A Receptacle has a chemical content which is a set of {Labware::Aliquot aliquots}.
+  module Laboratory
+    # A Receptacle has a chemical content which is a set of {Laboratory::Aliquot aliquots}.
     # It can be seen (and used) as a Array of Aliquots (until a certain extend).
-    # {include:Labware::Aliquot}
+    # {include:Laboratory::Aliquot}
     module Receptacle
 
       def self.included(klass)
@@ -37,7 +37,7 @@ module Lims::Core
 
           # Takes (removes) a specified amount of each aliquots (proportionally)
           # @param amount
-          # @return [Array<Labware::Aliquot>]
+          # @return [Array<Laboratory::Aliquot>]
           def take(amount=nil)
             # @todo : implement
             # take_fraction
@@ -46,7 +46,7 @@ module Lims::Core
 
           # Takes (removes) a specified amount of each aliquots (proportionally)
           # @param [Float] f the fraction (between 0.0 and 1.0) of each aliquots to take.
-          # @return [Array<Labware::Aliquot>]
+          # @return [Array<Laboratory::Aliquot>]
           def take_fraction(f)
             content.map {|a| a.take_fraction(f) }
           end

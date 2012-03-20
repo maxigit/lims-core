@@ -1,13 +1,13 @@
 # Spec requirements
-require 'labware/spec_helper'
-require 'labware/located_examples'
-require 'labware/container_examples'
-require 'labware/labellable_examples'
+require 'laboratory/spec_helper'
+require 'laboratory/located_examples'
+require 'laboratory/container_examples'
+require 'laboratory/labellable_examples'
 
 # Model requirements
-require 'lims/core/labware/plate'
+require 'lims/core/laboratory/plate'
 
-module Lims::Core::Labware
+module Lims::Core::Laboratory
   describe Plate  do
     it_behaves_like "located" 
     context "contains wells" do

@@ -1,10 +1,10 @@
 # Spec requirements
-require 'labware/spec_helper'
+require 'laboratory/spec_helper'
 
 # Model requirements
-require 'lims/core/labware/aliquot'
+require 'lims/core/laboratory/aliquot'
 
-module Lims::Core::Labware
+module Lims::Core::Laboratory
   describe Aliquot do
     context "to be valid" do
       let (:aliquot) {Aliquot.new(:quantity=>10)}

@@ -3,11 +3,11 @@ require 'spec_helper'
 
 # Model requirements
 
-require 'lims/core/labware/flowcell'
+require 'lims/core/laboratory/flowcell'
 require 'facets/array'
 
 module Lims::Core
-  module Labware
+  module Laboratory
     shared_context "flowcell factory" do
       def new_flowcell_with_samples(sample_nb=5)
         Flowcell.new.tap do |flowcell|

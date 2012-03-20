@@ -1,11 +1,11 @@
 # Spec requirements
-require 'labware/spec_helper'
-require 'labware/receptacle_examples'
+require 'laboratory/spec_helper'
+require 'laboratory/receptacle_examples'
 
 # Model requirements
-require 'lims/core/labware/flowcell'
+require 'lims/core/laboratory/flowcell'
 
-module Lims::Core::Labware
+module Lims::Core::Laboratory
   describe Flowcell::Lane  do
     it "belongs  to a flowcell "  # contained by a flowcell
     it_behaves_like "receptacle"

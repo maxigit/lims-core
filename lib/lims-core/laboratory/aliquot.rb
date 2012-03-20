@@ -2,12 +2,12 @@
 require 'common'
 
 
-require 'lims/core/labware/sample'
-require 'lims/core/labware/tag'
+require 'lims/core/laboratory/sample'
+require 'lims/core/laboratory/tag'
 require 'lims/core/resource'
 
 module Lims::Core
-  module Labware
+  module Laboratory
     # An aliquot represent the fraction of identical chemical substance inside a receptacle.
     # it should have:
     # 1. A receptacle
@@ -22,7 +22,7 @@ module Lims::Core
     # - "tagging" a sample with a tag will result in a receptacle containing one aliquot
     #   representing the tagged sample (the tag and the sample are bound together).
     # At the moment, rather than allowing an aliquot to have many constituents (in a free form way),
-    # an aliquot can be formed of at least a {Labware::Sample sample}, a {Labware::Tag tag} and  or a {Labware::BaitLibrary bait library}.
+    # an aliquot can be formed of at least a {Laboratory::Sample sample}, a {Laboratory::Tag tag} and  or a {Laboratory::BaitLibrary bait library}.
     class Aliquot
       include Resource
       attribute :sample, Sample

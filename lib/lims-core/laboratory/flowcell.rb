@@ -1,8 +1,8 @@
-require 'lims/core/labware/container'
+require 'lims/core/laboratory/container'
 require 'lims/core/resource'
 
 module Lims::Core
-  module Labware
+  module Laboratory
     # A flowcell with some lanes.
     # readable labels on it.
     # TODO add label behavior

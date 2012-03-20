@@ -1,11 +1,11 @@
 # Spec requirements
-require 'labware/spec_helper'
-require 'labware/receptacle_examples'
+require 'laboratory/spec_helper'
+require 'laboratory/receptacle_examples'
 
 # Model requirements
-require 'lims/core/labware/well'
+require 'lims/core/laboratory/well'
 
-module Lims::Core::Labware
+module Lims::Core::Laboratory
   describe Well  do
     it "belongs  to a plate "  # contained by a plate
     it_behaves_like "receptacle"

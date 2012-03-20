@@ -1,9 +1,9 @@
 require 'common'
 
 module Lims::Core
-  module Labware
-    # A container is an a labware pieces
-    # containing other labware pieces.
+  module Laboratory
+    # A container is an a laboratory pieces
+    # containing other laboratory pieces.
     # Example, a plate or a tube rack.
     module Container
       private

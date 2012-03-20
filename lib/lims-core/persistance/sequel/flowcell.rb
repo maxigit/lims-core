@@ -34,7 +34,7 @@ module Lims::Core
 
         # Save all children of the given flowcell
         # @param [Fixnum] id the id in the database
-        # @param [Labware::Flowcell] flowcell
+        # @param [Laboratory::Flowcell] flowcell
         # @return [Boolean]
         def save_children(id, flowcell)
           flowcell.each_with_index do |lane, position|
@@ -45,7 +45,7 @@ module Lims::Core
         # Delete all children of the given flowcell
         # But don't destroy the 'external' elements (example aliquots)
         # @param [Fixnum] id the id in the database
-        # @param [Labware::Flowcell] flowcell
+        # @param [Laboratory::Flowcell] flowcell
         def delete_children(id, flowcell)
           Lane::dataset(@session).filter(:flowcell_id => id).delete
         end
@@ -53,8 +53,8 @@ module Lims::Core
         # Load all children of the given flowcell
         # Loaded object are automatically added to the session.
         # @param [Fixnum] id the id in the database
-        # @param [Labware::Flowcell] flowcell
-        # @return [Labware::Flowcell, nil] 
+        # @param [Laboratory::Flowcell] flowcell
+        # @return [Laboratory::Flowcell, nil] 
         #
         def load_children(id, flowcell)
           Lane::dataset(@session).join(Aliquot::dataset(@session), :id => :aliquot_id).filter(:flowcell_id => id).each do |att|

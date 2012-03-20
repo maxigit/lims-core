@@ -1,7 +1,7 @@
 require 'common'
 
 module Lims::Core
-  module Labware
+  module Laboratory
     # A labellable is something which can have one or more labels.
     # By labels we mean any readable information found on a physical oblect.
     # This can be serial number, stick label with barcode etc.

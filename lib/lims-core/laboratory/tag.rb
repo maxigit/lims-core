@@ -1,7 +1,7 @@
 require 'common'
 
 module Lims::Core
-  module Labware
+  module Laboratory
     # A tag is a sequence of DNA meant to be bound to a sample to recognize
     # from other samples in the same multiplex.
     class Tag

@@ -1,11 +1,11 @@
 # Spec requirements
-require 'labware/spec_helper'
+require 'laboratory/spec_helper'
 require 'organization/releasable_examples'
 
 # Model requirements
-require 'lims/core/labware/sample'
+require 'lims/core/laboratory/sample'
 
-module Lims::Core::Labware
+module Lims::Core::Laboratory
   describe Sample do
     it_behaves_like "releasable"
 

@@ -1,7 +1,7 @@
 # Spec requirements
-require 'labware/spec_helper'
+require 'laboratory/spec_helper'
 
-module Lims::Core::Labware
+module Lims::Core::Laboratory
   # A Container contains 'contained' 
   module Container
   end

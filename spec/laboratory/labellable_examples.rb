@@ -1,5 +1,5 @@
 # Spec requirements
-require 'labware/spec_helper'
+require 'laboratory/spec_helper'
 
 shared_examples "labellable" do
   it "has one labels"

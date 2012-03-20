@@ -1,7 +1,7 @@
-require 'lims/core/labware/receptacle.rb'
+require 'lims/core/laboratory/receptacle.rb'
 module Lims::Core
 
-  module Labware
+  module Laboratory
     # The well of a {Plate}. 
     # Contains some chemical substances.
     class Well

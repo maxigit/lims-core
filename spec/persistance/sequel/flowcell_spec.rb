@@ -1,12 +1,12 @@
 # Spec requirements
 require 'persistance/sequel/spec_helper'
 
-require 'labware/flowcell_shared'
+require 'laboratory/flowcell_shared'
 require 'persistance/sequel/store_shared'
 
 # Model requirements
 require 'lims/core/persistance/sequel/store'
-require 'lims/core/labware/flowcell'
+require 'lims/core/laboratory/flowcell'
 
 require 'logger'
 DB = Sequel.sqlite '', :logger => Logger.new($stdout) 

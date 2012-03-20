@@ -1,5 +1,5 @@
 # Spec requirements
-require 'labware/spec_helper'
+require 'laboratory/spec_helper'
 
 shared_examples "located" do
   it "requires a location"

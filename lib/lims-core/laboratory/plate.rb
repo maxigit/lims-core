@@ -1,8 +1,8 @@
-require 'lims/core/labware/container'
-require 'lims/core/labware/well'
+require 'lims/core/laboratory/container'
+require 'lims/core/laboratory/well'
 
 module Lims::Core
-  module Labware
+  module Laboratory
     # A plate is a plate as seen in a laboratory, .i.e
     # a rectangular bits of platics with wells and some 
     # readable labels on it.
