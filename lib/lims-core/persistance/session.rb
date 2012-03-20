@@ -34,6 +34,8 @@ module Lims::Core
           @in_session = false
           save_all
           return to_return
+        ensure
+          @in_session = false
         end
 
 
