@@ -4,7 +4,7 @@ require 'common'
 module Lims::Core
   module Organization
     # A project corresponds to a source of funding.
-    # It has a manager and {Quota quotas}.
+    # It has a manager.
     class Project
     end
   end
