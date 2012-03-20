@@ -9,6 +9,25 @@ module Lims::Core
       # Not a flowcell but a flowcell persistor.
       class Flowcell < Persistance::Flowcell
         include Sequel::Persistor
+
+      # Not a lane but a lane {Persistor}.
+        class Lane < Persistance::Flowcell::Lane
+          include Sequel::Persistor
+          def self.table_name
+            :lanes
+          end
+
+          def save(lane, flowcell_id, position)
+            #todo bulk save if needed
+            lane.each do |aliquot|
+              aliquot_id = @session.save(aliquot)
+              dataset.insert(:flowcell_id => flowcell_id,
+                             :position => position,
+                             :aliquot_id  => aliquot_id)
+            end
+          end
+        end #class Lane
+
         def self.table_name
           :flowcells
         end

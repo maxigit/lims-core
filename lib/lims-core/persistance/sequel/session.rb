@@ -3,7 +3,6 @@
 require 'sequel'
 require 'lims/core/persistance/session'
 require 'lims/core/persistance/sequel/flowcell'
-require 'lims/core/persistance/sequel/lane'
 require 'lims/core/persistance/sequel/aliquot'
 
 module Lims::Core

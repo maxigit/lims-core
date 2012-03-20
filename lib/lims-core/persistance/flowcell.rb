@@ -11,6 +11,14 @@ module Lims::Core
     # include the suitable persistor.
     class Flowcell
       Model = Labware::Flowcell
+
+      # @abstract
+      # Base for all Lane persistor.
+      # Real implementation classes (e.g. Sequel::Lane) should
+      # include the suitable persistor.
+      class Lane
+        Model = Labware::Flowcell::Lane
       end
+    end
   end
 end

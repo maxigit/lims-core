@@ -88,7 +88,12 @@ module Lims::Core
         # @return [Persistor, nil]
         def persistor_for(object)
           name = persistor_name_for(object)
-          @persistor_map[name]  ||= @store.base_module.const_get(name).try(:new, self)
+          @persistor_map[name]  ||= \
+            begin
+              @store.base_module.constant(name).new( self)
+            rescue NameError
+              nil
+            end
         end
 
         # Compute the class name of the persistor corresponding to the argument
@@ -98,7 +103,7 @@ module Lims::Core
           case object
           when String then object
           when Symbol then object.to_s
-          else object.class.name.split('::').pop
+          else object.class.name.sub(/^Lims::Core::\w+::/, '')
           end.upper_camelcase
         end
       end
