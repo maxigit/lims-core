@@ -4,7 +4,7 @@ require 'organization/spec_helper'
 module Lims::Core::Organization
   shared_examples "releasable" do
 
-    xit "should be releasable" do
+    xit "is releasable" do
        described_class.new.is_a?(Releasable).should eq true
     end
 
@@ -14,12 +14,12 @@ module Lims::Core::Organization
     end
 
     context "to be releasable" do
-      it "should have data release attribute set"
-      it "should have data release policy set"
+      it "has data release attribute set"
+      it "has data release policy set"
     end
 
     context  "to be sent to EBI" do
-      it "should have an XML file" #might be xml generator 
+      it "corresponds to  an XML file" #might be xml generator 
     end
   end
 end

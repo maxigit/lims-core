@@ -11,7 +11,7 @@ module Lims::Core::Action
       end
 
       context "to many plates" do
-        it "should fail"
+        it "fails"
       end
     end 
   end
@@ -30,7 +30,7 @@ module Lims::Core::Action
         it "transfers the well in transposed way" 
       end
       context "if not possible" do
-        it "should fail"
+        it "fails"
       end
     end
   end
