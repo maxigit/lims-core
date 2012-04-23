@@ -21,8 +21,6 @@ module Lims::Core
           @persistor_map = {}
         end
 
-        def_delegators :@store, :database
-
         # Execute a block and save every 'marked' object
         # in a transaction at the end.
         # @yieldparam [Session] session the created session.
@@ -56,7 +54,7 @@ module Lims::Core
         # need it to save their children. To solve this, we raise an exception if it's inside a sess
         # @return [Boolean]
         def save(object, *options)
-          raise RuntimeError, "Can't save object inside a session. Please considere the << methods." unless @save_in_progress
+          raise RuntimeError, "Can't save object inside a session. Please considere the << methods." if @in_session
           return if @saved.include?(object)
           @saved << object
 
@@ -98,11 +96,9 @@ module Lims::Core
         private
         # save all objects which needs to be
         def save_all()
-          @save_in_progress = true # allows saving
           @objects.each do |object|
             save(object)
           end
-          @save_in_progress = false
         end
 
         # Get the persistor corresponding to the object class
@@ -113,9 +109,10 @@ module Lims::Core
           @persistor_map[name]  ||= begin 
                                       persistor_class = @store.base_module.constant(name)
                                       raise NameError, "Persistor #{name} not defined for #{@store.base_module.name}" unless persistor_class &&  persistor_class.ancestors.include?(Persistor)
-                                      persistor_class.new(self)
+                                      persistor_class.new(self, name)
                                     end
         end
+        public :persistor_for
 
         # Compute the class name of the persistor corresponding to the argument
         # @param [Resource]

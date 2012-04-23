@@ -17,7 +17,7 @@ module Lims::Core
         # @param [Logger, file] logger 
         # @param [Symbol, String] method the method call to
         # send information to the logger.
-        def initialize(logger, method=:info, *args)
+        def initialize(logger=STDOUT, method=:info, *args)
           @logger = case logger
                     when ::Logger then  logger
                     else ::Logger.new(logger)

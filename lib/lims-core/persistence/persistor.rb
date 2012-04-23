@@ -16,7 +16,7 @@ module Lims::Core
     class Persistor
       include IdentityMap
 
-      def initialize (session, *args, &block)
+      def initialize (session, name, *args, &block)
         @session = session
         super(*args, &block)
       end
@@ -120,7 +120,6 @@ module Lims::Core
         # Probably quicker than trying to guess what has changed
         id.tap do
           update_raw(object, id, *params)
-          dataset[primary_key => id].update(object.attributes)
           update_children(id, object)
         end
       end
@@ -129,7 +128,6 @@ module Lims::Core
       # @param [Fixum] id id in the database
       # @param [Resource] object the object 
       def save_children(id, object)
-
       end
 
       # save children of an existing object.
@@ -141,14 +139,12 @@ module Lims::Core
       end
 
       def delete_children(id, object)
-        raise NotImplementedError
       end
 
       # Loads children from the database and set the to model object.
       # @param id primary key of the model object in the database.
       # @param m  instance of model to load
       def load_children(id, m)
-        raise NotImplementedError
       end
     end
   end

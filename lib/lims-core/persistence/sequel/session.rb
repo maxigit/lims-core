@@ -8,6 +8,7 @@ module Lims::Core
     module Sequel
       # Sequel specific implementation of a {Persistence::Session Session}.
       class Session < Persistence::Session
+        def_delegators :@store, :database
       end
     end
   end
