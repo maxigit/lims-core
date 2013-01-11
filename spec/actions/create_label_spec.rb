@@ -81,10 +81,10 @@ module Lims::Core
     end
 
     shared_examples_for "creating a Labellable with label(s)" do
-      include_context "create object"
       it_behaves_like "an action"
       it "creates a labellable when called" do
 
+        debugger
         result = subject.call()
         result.should be_a(Hash)
 
