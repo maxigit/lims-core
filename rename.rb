@@ -57,7 +57,7 @@ ARGF.each do |line|
   when /module\s+#{old_module || '<>'}/
       puts line.sub(old_module, new_module)
   when /(class|module)\s+#{old_class || '<>'}/
-      puts line.sub(old_class, "#{resource_class}::#{new_class}")
+      puts line.sub(old_class, "#{resource_class}::#{new_class}").sub("Persistence::#{old_class}", "#{old_class}Persistor")
   when  /^(\s+require.*)\/(actions|persistence)\/((#{resource_reg}).*)/
     resource = $4
     if new_directory=directory_map[resource.to_sym]

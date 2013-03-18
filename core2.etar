@@ -3926,7 +3926,7 @@ module Lims::Core
   module Laboratory
     module Sequel
       # Not a aliquot but a aliquot persistor.
-      class Aliquot::AliquotSequelPersistor < Persistence::Aliquot
+      class Aliquot::AliquotSequelPersistor < AliquotPersistor
         include Sequel::Persistor
         def self.table_name
           :aliquots
@@ -3968,7 +3968,7 @@ require 'lims/core/persistence/sequel/persistor'
 module Lims::Core
   module Organization
     module Sequel
-      class Batch::BatchSequelPersistor < Persistence::Batch
+      class Batch::BatchSequelPersistor < BatchPersistor
         include Sequel::Persistor
 
         def self.table_name
@@ -4206,7 +4206,7 @@ module Lims::Core
   module Laboratory
     module Sequel
       # Not a flowcell but a flowcell persistor.
-      class Flowcell::FlowcellSequelPersistor < Persistence::Flowcell
+      class Flowcell::FlowcellSequelPersistor < FlowcellPersistor
         include Sequel::Persistor
 
       # Not a lane but a lane {Persistor}.
@@ -4290,7 +4290,7 @@ module Lims::Core
   module Laboratory
     module Sequel
       # A gel persistor. It saves the gel's data to the DB.
-      class Gel::GelSequelPersistor < Persistence::Gel
+      class Gel::GelSequelPersistor < GelPersistor
         include Sequel::Persistor
         include Container
 
@@ -4346,7 +4346,7 @@ require 'lims/core/uuids/uuid_resource'
 module Lims::Core
   module Laboratory
     module Sequel
-      class Labellable::LabellableSequelPersistor < Persistence::Labellable
+      class Labellable::LabellableSequelPersistor < LabellablePersistor
         include Sequel::Persistor
 
         def self.table_name
@@ -4593,7 +4593,7 @@ module Lims::Core
   module Organization
     module Sequel
       # Not a order but a order persistor.
-      class Order::OrderSequelPersistor < Persistence::Order
+      class Order::OrderSequelPersistor < OrderPersistor
         include Sequel::Persistor
         def self.table_name
           :orders
@@ -4808,7 +4808,7 @@ module Lims::Core
   module Laboratory
     module Sequel
       # Not a plate but a plate persistor.
-      class Plate::PlateSequelPersistor < Persistence::Plate
+      class Plate::PlateSequelPersistor < PlatePersistor
         include Sequel::Persistor
         include Container
 
@@ -4941,10 +4941,10 @@ module Lims::Core
   module Laboratory
     module Sequel
       # a spin column persistor.
-      class SpinColumn::SpinColumnSequelPersistor < Persistence::SpinColumn
+      class SpinColumn::SpinColumnSequelPersistor < SpinColumnPersistor
         include Sequel::Persistor
 
-        class SpinColumn::SpinColumnSequelPersistorAliquot < Persistence::SpinColumn::SpinColumnAliquot
+        class SpinColumn::SpinColumnSequelPersistorAliquot < SpinColumnPersistor::SpinColumnAliquot
           include Sequel::Persistor
 
           # Do a bulk load of aliquot and pass each to a block
@@ -5028,7 +5028,7 @@ module Lims::Core
   module Laboratory
     module Sequel
       # Not a tag_group but a tag_group persistor.
-      class TagGroup::TagGroupSequelPersistor < Persistence::TagGroup
+      class TagGroup::TagGroupSequelPersistor < TagGroupPersistor
         include Sequel::Persistor
 
 
@@ -5081,10 +5081,10 @@ module Lims::Core
   module Laboratory
     module Sequel
       # Not a tube but a tube persistor.
-      class Tube::TubeSequelPersistor < Persistence::Tube
+      class Tube::TubeSequelPersistor < TubePersistor
         include Sequel::Persistor
 
-        class Tube::TubeSequelPersistorAliquot < Persistence::Tube::TubeAliquot
+        class Tube::TubeSequelPersistorAliquot < TubePersistor::TubeAliquot
           include Sequel::Persistor
 
           # Do a bulk load of aliquot and pass each to a block
@@ -5129,7 +5129,7 @@ module Lims::Core
   module Laboratory
     module Sequel
       # Not a tube_rack but a tube_rack persistor.
-      class Tube::TubeRackSequelPersistor < Persistence::TubeRack
+      class Tube::TubeRackSequelPersistor < TubeRackPersistor
         include Sequel::Persistor
 
       # Not a well but a well {Persistor}.
