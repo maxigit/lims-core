@@ -48,29 +48,26 @@ ARGF.each do |line|
       old_class = $4.split('_').map(&:capitalize).join
       resource_class = resource.split('_').map(&:capitalize).join
       
-      puts "#{$1}/#{current_directory}/#{resource}/#{filename}.rb"
+      line =  "#{$1}/#{current_directory}/#{resource}/#{filename}.rb"
     else # normal file
       old_module = nil
       current_directory = nil
-      puts line
     end
   when /module\s+#{old_module || '<>'}/
-      puts line.sub(old_module, new_module)
+      line =  line.sub(old_module, new_module)
   when /(class|module)\s+#{old_class || '<>'}/
-      puts line.sub(old_class, "#{resource_class}::#{new_class}").sub("Persistence::#{old_class}", "#{old_class}Persistor")
-  when  /^(\s+require.*)\/(actions|persistence)\/((#{resource_reg}).*)/
-    resource = $4
+      line =  line.sub(old_class, "#{resource_class}::#{new_class}").sub("Persistence::#{old_class}", "#{old_class}Persistor")
+  when  /^(\s+require.*)\/(actions|persistence)\/(\w+\/)?((#{resource_reg}).*)'/
+    resource = $5
     if new_directory=directory_map[resource.to_sym]
+      filename =$4
       if $2 == "persistence"
-        resource += "_persistor"
+        filename += "_#{$3[0...-1]}" if $3
+        filename += "_persistor"
       end
-      puts "#{$1}/#{new_directory}/#{$resource}/#{$3}"
-    else
-      puts line
+      line = "#{$1}/#{new_directory}/#{resource}/#{filename}'"
     end
-  else
-    puts line
-    
   end
+  puts line
 
 end
