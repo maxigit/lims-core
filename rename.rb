@@ -31,6 +31,7 @@ new_class = nil
 old_class = nil
 resource = nil
 resource_class = nil
+tabs = nil
 ARGF.each do |line|
   case line
   when  /^(filename.*)\/(actions|persistence)\/(\w+\/)?((#{resource_reg}).*).rb/
@@ -67,7 +68,16 @@ ARGF.each do |line|
       end
       line = "#{$1}/#{new_directory}/#{resource}/#{filename}'"
     end
+  when /^(\s*)module\sSequel/
+    tabs = $1
+    line = nil
+  when /^#{tabs || 'nothingtomatch'}end/
+    line = nil
+    tabs = nil
   end
-  puts line
+
+  # unindent if we are in module block which is being deleted
+  line = $1 if (tabs && line =~ /^  (.*)/)
+  puts line if line
 
 end

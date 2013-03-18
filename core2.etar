@@ -3924,35 +3924,33 @@ require 'lims/core/persistence/sequel/persistor'
 
 module Lims::Core
   module Laboratory
-    module Sequel
-      # Not a aliquot but a aliquot persistor.
-      class Aliquot::AliquotSequelPersistor < AliquotPersistor
-        include Sequel::Persistor
-        def self.table_name
-          :aliquots
-        end
-
-        def filter_attributes_on_save(attributes)
-          attributes.mash do |k,v|
-            case k
-            when :tag then [:tag_id, @session.id_for!(v)]
-            when :sample then [:sample_id, @session.id_for!(v)]
-            else [k, v]
-            end
-          end
-        end
-
-        def filter_attributes_on_load(attributes)
-          attributes.mash do |k,v|
-            case k
-            when :tag_id then [:tag, @session.oligo[v]]
-            when :sample_id then [:sample, @session.sample[v]]
-            else [k, v]
-            end
-          end
-        end
-
+    # Not a aliquot but a aliquot persistor.
+    class Aliquot::AliquotSequelPersistor < AliquotPersistor
+      include Sequel::Persistor
+      def self.table_name
+        :aliquots
       end
+
+      def filter_attributes_on_save(attributes)
+        attributes.mash do |k,v|
+          case k
+          when :tag then [:tag_id, @session.id_for!(v)]
+          when :sample then [:sample_id, @session.id_for!(v)]
+          else [k, v]
+          end
+        end
+      end
+
+      def filter_attributes_on_load(attributes)
+        attributes.mash do |k,v|
+          case k
+          when :tag_id then [:tag, @session.oligo[v]]
+          when :sample_id then [:sample, @session.sample[v]]
+          else [k, v]
+          end
+        end
+      end
+
     end
   end
 end
@@ -3967,13 +3965,11 @@ require 'lims/core/persistence/sequel/persistor'
 
 module Lims::Core
   module Organization
-    module Sequel
-      class Batch::BatchSequelPersistor < BatchPersistor
-        include Sequel::Persistor
+    class Batch::BatchSequelPersistor < BatchPersistor
+      include Sequel::Persistor
 
-        def self.table_name
-          :batches
-        end
+      def self.table_name
+        :batches
       end
     end
   end
@@ -3984,43 +3980,41 @@ mkdir -p $(dirname $filename)
 cat <<__END_OF_container.rb__ > $filename
 module Lims::Core
   module Organization
-    module Sequel
-      module Container
+    module Container
 
-        # The specific container should implement this method
-        # and return the proper container_id with symbol type
-        # i. e. :gel_id
-        def container_id_sym
-          raise NotImplementedError
-        end
-
-        # The specific container should implement this method
-        # and return the proper dataset of the element of the container
-        # i.e. in the case of Gel: Window::dataset(@session)
-        def element_dataset
-          raise NotImplementedError
-        end
-
-        # Delete all children of the given container
-        # But don't destroy the 'external' elements (example aliquots)
-        # @param [Fixnum] id the id in the database
-        # @param [i.e. Laboratory::Gel] container
-        def delete_children(id, gel)
-          element_dataset.filter(container_id_sym => id).delete
-        end
-
-        # Load all children of the given container
-        # Loaded object are automatically added to the session.
-        # @param [Fixnum] id the id in the database
-        # @param [i.e. Laboratory::Gel] container
-        # @return [i.e. Laboratory::Gel, nil] 
-        def load_children(id, container)
-          element.load_aliquots(id) do |position, aliquot|
-            container[position] << aliquot
-          end
-        end
-
+      # The specific container should implement this method
+      # and return the proper container_id with symbol type
+      # i. e. :gel_id
+      def container_id_sym
+        raise NotImplementedError
       end
+
+      # The specific container should implement this method
+      # and return the proper dataset of the element of the container
+      # i.e. in the case of Gel: Window::dataset(@session)
+      def element_dataset
+        raise NotImplementedError
+      end
+
+      # Delete all children of the given container
+      # But don't destroy the 'external' elements (example aliquots)
+      # @param [Fixnum] id the id in the database
+      # @param [i.e. Laboratory::Gel] container
+      def delete_children(id, gel)
+        element_dataset.filter(container_id_sym => id).delete
+      end
+
+      # Load all children of the given container
+      # Loaded object are automatically added to the session.
+      # @param [Fixnum] id the id in the database
+      # @param [i.e. Laboratory::Gel] container
+      # @return [i.e. Laboratory::Gel, nil] 
+      def load_children(id, container)
+        element.load_aliquots(id) do |position, aliquot|
+          container[position] << aliquot
+        end
+      end
+
     end
   end
 end
@@ -4030,29 +4024,27 @@ mkdir -p $(dirname $filename)
 cat <<__END_OF_container_element.rb__ > $filename
 module Lims::Core
   module Organization
-    module Sequel
-      module ContainerElement
+    module ContainerElement
 
-        def save_raw_association(container_id, aliquot_id, position)
-            dataset.insert(container_id_sym => container_id,
-                           :position => position,
-                           :aliquot_id  => aliquot_id)
-        end
-
-        # Do a bulk load of aliquot and pass each to a block
-        # @param container_id the id of the container to load.
-        # @yieldparam [Integer] position
-        # @yieldparam [Aliquot] aliquot
-        def load_aliquots(container_id)
-          element_dataset.join(Aliquot::dataset(@session), :id => :aliquot_id).filter(container_id_sym => container_id).each do |att|
-            position = att.delete(:position)
-            att.delete(:id)
-            aliquot  = @session.aliquot.get_or_create_single_model(att[:aliquot_id], att)
-            yield(position, aliquot)
-          end
-        end
-
+      def save_raw_association(container_id, aliquot_id, position)
+          dataset.insert(container_id_sym => container_id,
+                         :position => position,
+                         :aliquot_id  => aliquot_id)
       end
+
+      # Do a bulk load of aliquot and pass each to a block
+      # @param container_id the id of the container to load.
+      # @yieldparam [Integer] position
+      # @yieldparam [Aliquot] aliquot
+      def load_aliquots(container_id)
+        element_dataset.join(Aliquot::dataset(@session), :id => :aliquot_id).filter(container_id_sym => container_id).each do |att|
+          position = att.delete(:position)
+          att.delete(:id)
+          aliquot  = @session.aliquot.get_or_create_single_model(att[:aliquot_id], att)
+          yield(position, aliquot)
+        end
+      end
+
     end
   end
 end
@@ -4065,130 +4057,128 @@ require 'active_support/inflector'
 
 module Lims::Core
   module Organization
-    module Sequel
-      # Implementes filter methods needed by persitors.
-      module Filters
-        # Implement a multicriteria filter for a Sequel::Persistor.
-        # Value can be either a String, an Array  or a Hash.
-        # Strings and Arrays are normal filters, whereas Hashes
-        # correspond to a joined search. The criteria will apply to the 
-        # joined object corresponding to the key.
-        # @param [Hash<String, Object > criteria
-        # @return [Persistor]
-        def multi_criteria_filter(criteria)
-          # We need to create the adequat dataset.
-          dataset = __multi_criteria_filter(criteria).dataset
-          # As the dataset can include join, we need to select only the columns
-          # corresponding to the persistor
-          self.class.new(self, dataset.qualify(table_name).distinct())
-        end
-
-        # Implements a label filter for a Sequel::Persistor.
-        # Nil value would be ignored
-        # @param [String, Nil] position of the label 
-        # @param [String, Nil] value of the label
-        # @param [String, Nil] type fo the label
-        # @return [Persistor]
-        def label_filter(criteria)
-          labellable_dataset = @session.labellable.__multi_criteria_filter(criteria).dataset
-
-          # join labellabe request to uuid_resource
-          persistor = self.class.new(self, labellable_dataset.join("uuid_resources", :uuid => :"name"))
-
-          # join everything to current resource table
-          # Qualify method is needed to get only the fields related to the searched
-          # resource. Otherwise, multiple id columns are returned which lead to a
-          # ambiguous situation when we try to get the id of the resource. 
-          # This leads to an incorrect uuid for the found resources.
-          self.class.new(self, dataset.join(persistor.dataset, :key => primary_key).qualify)
-        end
-
-        # Implement an order filter for a Sequel::Persistor.
-        # @param [Hash<String, Object>] criteria
-        # @example
-        #     {:order => {:item => {:status => "pending"}, :status => "draft"}}
-        #     Create a request to get the resources in a draft order
-        #     with a pending item status.
-        #     @return [Persistor]
-        def order_filter(criteria)
-          criteria = criteria[:order] if criteria.keys.first.to_s == "order"
-          order_persistor = @session.order.__multi_criteria_filter(criteria)
-          order_dataset = order_persistor.dataset
-
-          # If criteria doesn't include an item key, we need 
-          # to make the join with the table items here.
-          unless criteria.has_key?("item") or criteria.has_key?(:item)
-            order_dataset = order_dataset.join(:items, :order_id => order_persistor.primary_key)
-          end
-          
-          # Join order dataset with the uuid_resources table 
-          order_dataset = order_dataset.join(:uuid_resources, :uuid => :items__uuid)            
-
-          # Join order dataset with the resource dataset
-          # Qualify method is needed to get only the fields related
-          # to the resource table. Otherwise, id could be confused.
-          # The expected request would be for example something like
-          # select plates.* from ...
-          # As a same resource could belong to multiple orders, distinct
-          # is used to get only one copy of each resource.
-          self.class.new(self, dataset.join(order_dataset, :key => primary_key).qualify.distinct)
-        end
-
-        # Implement a batch filter for a Sequel::Persistor.
-        # @param [Hash<String, Object>] criteria
-        # @example
-        #   {:batch => {:uuid => '11111111-2222-3333-4444-555555555555'}}
-        #   Create a request to get the resources which are referenced by
-        #   an order item assigned to a batch with the given uuid.
-        #   Is equivalent to the criteria:
-        #   {:order => {:item => {:batch => {:uuid => '11111111-2222-3333-4444-555555555555'}}}}
-        def batch_filter(criteria)
-          order_filter({:order => {:item => criteria } })
-        end
-
-        protected
-        # @param Hash criteria
-        # @return Persistor
-        def __multi_criteria_filter(criteria)
-          # Extract critera recursively and apply subhashes to
-          # joined table
-          # Hash value are criteria for the corresponding joined tabled
-          # We need to extract them and do the obvious join
-          # Values are passed to filter_attributes_on save to get
-          # the right format if needed.
-          joined = criteria.reduce(self) do |persistor, (key, value)|
-            case value
-            when Hash
-              criteria_persistor = persistor.send(key)
-              filtered_value = criteria_persistor.filter_attributes_on_save(value.rekey {|k| k.to_sym})
-              joined_persistor = criteria_persistor.__multi_criteria_filter(filtered_value)
-              __join(joined_persistor)
-            else persistor
-            end
-          end
-
-          # We need to passes to filter are applied on the joined persistor.
-          # This is needed because the __join function expected bare persistor 
-          # and will loose any filter applied on the original persistor
-          criteria.reduce(joined) do |persistor, (key, value)|
-            case value
-            when Hash
-              persistor
-            else
-              self.class.new(persistor, persistor.dataset.filter(::Sequel.qualify(table_name, key) => value))
-            end
-          end
-        end
-
-        # Assume that the original persistor his *blank* ie 
-        # it doesn't contain any SQL modifier
-        # @param [Persistor] persistor
-        # @return [Persistor]
-        def __join(persistor)
-          self.class.new(self, persistor.dataset.join(table_name, primary_key => :"#{table_name.to_s.singularize}_#{persistor.primary_key}"))
-        end
-
+    # Implementes filter methods needed by persitors.
+    module Filters
+      # Implement a multicriteria filter for a Sequel::Persistor.
+      # Value can be either a String, an Array  or a Hash.
+      # Strings and Arrays are normal filters, whereas Hashes
+      # correspond to a joined search. The criteria will apply to the 
+      # joined object corresponding to the key.
+      # @param [Hash<String, Object > criteria
+      # @return [Persistor]
+      def multi_criteria_filter(criteria)
+        # We need to create the adequat dataset.
+        dataset = __multi_criteria_filter(criteria).dataset
+        # As the dataset can include join, we need to select only the columns
+        # corresponding to the persistor
+        self.class.new(self, dataset.qualify(table_name).distinct())
       end
+
+      # Implements a label filter for a Sequel::Persistor.
+      # Nil value would be ignored
+      # @param [String, Nil] position of the label 
+      # @param [String, Nil] value of the label
+      # @param [String, Nil] type fo the label
+      # @return [Persistor]
+      def label_filter(criteria)
+        labellable_dataset = @session.labellable.__multi_criteria_filter(criteria).dataset
+
+        # join labellabe request to uuid_resource
+        persistor = self.class.new(self, labellable_dataset.join("uuid_resources", :uuid => :"name"))
+
+        # join everything to current resource table
+        # Qualify method is needed to get only the fields related to the searched
+        # resource. Otherwise, multiple id columns are returned which lead to a
+        # ambiguous situation when we try to get the id of the resource. 
+        # This leads to an incorrect uuid for the found resources.
+        self.class.new(self, dataset.join(persistor.dataset, :key => primary_key).qualify)
+      end
+
+      # Implement an order filter for a Sequel::Persistor.
+      # @param [Hash<String, Object>] criteria
+      # @example
+      #     {:order => {:item => {:status => "pending"}, :status => "draft"}}
+      #     Create a request to get the resources in a draft order
+      #     with a pending item status.
+      #     @return [Persistor]
+      def order_filter(criteria)
+        criteria = criteria[:order] if criteria.keys.first.to_s == "order"
+        order_persistor = @session.order.__multi_criteria_filter(criteria)
+        order_dataset = order_persistor.dataset
+
+        # If criteria doesn't include an item key, we need 
+        # to make the join with the table items here.
+        unless criteria.has_key?("item") or criteria.has_key?(:item)
+          order_dataset = order_dataset.join(:items, :order_id => order_persistor.primary_key)
+        end
+        
+        # Join order dataset with the uuid_resources table 
+        order_dataset = order_dataset.join(:uuid_resources, :uuid => :items__uuid)            
+
+        # Join order dataset with the resource dataset
+        # Qualify method is needed to get only the fields related
+        # to the resource table. Otherwise, id could be confused.
+        # The expected request would be for example something like
+        # select plates.* from ...
+        # As a same resource could belong to multiple orders, distinct
+        # is used to get only one copy of each resource.
+        self.class.new(self, dataset.join(order_dataset, :key => primary_key).qualify.distinct)
+      end
+
+      # Implement a batch filter for a Sequel::Persistor.
+      # @param [Hash<String, Object>] criteria
+      # @example
+      #   {:batch => {:uuid => '11111111-2222-3333-4444-555555555555'}}
+      #   Create a request to get the resources which are referenced by
+      #   an order item assigned to a batch with the given uuid.
+      #   Is equivalent to the criteria:
+      #   {:order => {:item => {:batch => {:uuid => '11111111-2222-3333-4444-555555555555'}}}}
+      def batch_filter(criteria)
+        order_filter({:order => {:item => criteria } })
+      end
+
+      protected
+      # @param Hash criteria
+      # @return Persistor
+      def __multi_criteria_filter(criteria)
+        # Extract critera recursively and apply subhashes to
+        # joined table
+        # Hash value are criteria for the corresponding joined tabled
+        # We need to extract them and do the obvious join
+        # Values are passed to filter_attributes_on save to get
+        # the right format if needed.
+        joined = criteria.reduce(self) do |persistor, (key, value)|
+          case value
+          when Hash
+            criteria_persistor = persistor.send(key)
+            filtered_value = criteria_persistor.filter_attributes_on_save(value.rekey {|k| k.to_sym})
+            joined_persistor = criteria_persistor.__multi_criteria_filter(filtered_value)
+            __join(joined_persistor)
+          else persistor
+          end
+        end
+
+        # We need to passes to filter are applied on the joined persistor.
+        # This is needed because the __join function expected bare persistor 
+        # and will loose any filter applied on the original persistor
+        criteria.reduce(joined) do |persistor, (key, value)|
+          case value
+          when Hash
+            persistor
+          else
+            self.class.new(persistor, persistor.dataset.filter(::Sequel.qualify(table_name, key) => value))
+          end
+        end
+      end
+
+      # Assume that the original persistor his *blank* ie 
+      # it doesn't contain any SQL modifier
+      # @param [Persistor] persistor
+      # @return [Persistor]
+      def __join(persistor)
+        self.class.new(self, persistor.dataset.join(table_name, primary_key => :"#{table_name.to_s.singularize}_#{persistor.primary_key}"))
+      end
+
     end
   end
 end
@@ -4204,74 +4194,72 @@ require 'lims/core/persistence/sequel/persistor'
 
 module Lims::Core
   module Laboratory
-    module Sequel
-      # Not a flowcell but a flowcell persistor.
-      class Flowcell::FlowcellSequelPersistor < FlowcellPersistor
+    # Not a flowcell but a flowcell persistor.
+    class Flowcell::FlowcellSequelPersistor < FlowcellPersistor
+      include Sequel::Persistor
+
+    # Not a lane but a lane {Persistor}.
+      class Lane < Persistence::Flowcell::Lane
         include Sequel::Persistor
-
-      # Not a lane but a lane {Persistor}.
-        class Lane < Persistence::Flowcell::Lane
-          include Sequel::Persistor
-          def self.table_name
-            :lanes
-          end
-
-          def save_raw_association(flowcell_id, aliquot_id, position)
-            dataset.insert(:flowcell_id => flowcell_id,
-                           :position => position,
-                           :aliquot_id  => aliquot_id)
-          end
-
-          # Do a bulk load of aliquot and pass each of a block
-          # @param flowcell_id the id of the flowcell to load.
-          # @yieldparam [Integer] position
-          # @yieldparam [Aliquot] aliquot
-          def load_aliquots(flowcell_id)
-            Lane::dataset(@session).join(Aliquot::dataset(@session), :id => :aliquot_id).filter(:flowcell_id => flowcell_id).each do |att|
-              position = att.delete(:position)
-              att.delete(:id)
-              aliquot  = @session.aliquot.get_or_create_single_model(att[:aliquot_id],  att )
-              yield(position, aliquot)
-            end
-          end
-        end #class Lane
-
         def self.table_name
-          :flowcells
+          :lanes
         end
 
-        # Save all children of the given flowcell
-        # @param [Fixnum] id the id in the database
-        # @param [Laboratory::Flowcell] flowcell
-        # @return [Boolean]
-        def save_children(id, flowcell)
-          flowcell.each_with_index do |lane, position|
-            @session.save(lane, id, position)
+        def save_raw_association(flowcell_id, aliquot_id, position)
+          dataset.insert(:flowcell_id => flowcell_id,
+                         :position => position,
+                         :aliquot_id  => aliquot_id)
+        end
+
+        # Do a bulk load of aliquot and pass each of a block
+        # @param flowcell_id the id of the flowcell to load.
+        # @yieldparam [Integer] position
+        # @yieldparam [Aliquot] aliquot
+        def load_aliquots(flowcell_id)
+          Lane::dataset(@session).join(Aliquot::dataset(@session), :id => :aliquot_id).filter(:flowcell_id => flowcell_id).each do |att|
+            position = att.delete(:position)
+            att.delete(:id)
+            aliquot  = @session.aliquot.get_or_create_single_model(att[:aliquot_id],  att )
+            yield(position, aliquot)
           end
         end
+      end #class Lane
 
-        # Delete all children of the given flowcell
-        # But don't destroy the 'external' elements (example aliquots)
-        # @param [Fixnum] id the id in the database
-        # @param [Laboratory::Flowcell] flowcell
-        def delete_children(id, flowcell)
-          Lane::dataset(@session).filter(:flowcell_id => id).delete
+      def self.table_name
+        :flowcells
+      end
+
+      # Save all children of the given flowcell
+      # @param [Fixnum] id the id in the database
+      # @param [Laboratory::Flowcell] flowcell
+      # @return [Boolean]
+      def save_children(id, flowcell)
+        flowcell.each_with_index do |lane, position|
+          @session.save(lane, id, position)
         end
+      end
 
-        def lane
-          @session.send("Flowcell::Lane")
-        end
+      # Delete all children of the given flowcell
+      # But don't destroy the 'external' elements (example aliquots)
+      # @param [Fixnum] id the id in the database
+      # @param [Laboratory::Flowcell] flowcell
+      def delete_children(id, flowcell)
+        Lane::dataset(@session).filter(:flowcell_id => id).delete
+      end
 
-        # Load all children of the given flowcell
-        # Loaded object are automatically added to the session.
-        # @param [Fixnum] id the id in the database
-        # @param [Laboratory::Flowcell] flowcell
-        # @return [Laboratory::Flowcell, nil] 
-        #
-        def load_children(id, flowcell)
-          lane.load_aliquots(id) do |position, aliquot|
-            flowcell[position] << aliquot
-          end
+      def lane
+        @session.send("Flowcell::Lane")
+      end
+
+      # Load all children of the given flowcell
+      # Loaded object are automatically added to the session.
+      # @param [Fixnum] id the id in the database
+      # @param [Laboratory::Flowcell] flowcell
+      # @return [Laboratory::Flowcell, nil] 
+      #
+      def load_children(id, flowcell)
+        lane.load_aliquots(id) do |position, aliquot|
+          flowcell[position] << aliquot
         end
       end
     end
@@ -4288,48 +4276,46 @@ require 'lims/core/persistence/sequel/container_element'
 
 module Lims::Core
   module Laboratory
-    module Sequel
-      # A gel persistor. It saves the gel's data to the DB.
-      class Gel::GelSequelPersistor < GelPersistor
-        include Sequel::Persistor
-        include Container
+    # A gel persistor. It saves the gel's data to the DB.
+    class Gel::GelSequelPersistor < GelPersistor
+      include Sequel::Persistor
+      include Container
 
-        module Gel::GelSequelPersistorContainerElement
-          include ContainerElement
+      module Gel::GelSequelPersistorContainerElement
+        include ContainerElement
 
-          def element_dataset
-            Lims::Core::Persistence::Sequel::Gel::Window::dataset(@session)
-          end
-
-          def container_id_sym
-            :gel_id
-          end
-
-        end
-
-        # A window persistor. It saves the window's data to the DB.
-        class Window < Persistence::Gel::Window
-          include Sequel::Persistor
-          include GelContainerElement
-
-          def self.table_name
-            :windows
-          end
-
-        end 
-        #class Window
-
-        def self.table_name
-          :gels
+        def element_dataset
+          Lims::Core::Persistence::Sequel::Gel::Window::dataset(@session)
         end
 
         def container_id_sym
           :gel_id
         end
 
-        def element_dataset
-          Window::dataset(@session)
+      end
+
+      # A window persistor. It saves the window's data to the DB.
+      class Window < Persistence::Gel::Window
+        include Sequel::Persistor
+        include GelContainerElement
+
+        def self.table_name
+          :windows
         end
+
+      end 
+      #class Window
+
+      def self.table_name
+        :gels
+      end
+
+      def container_id_sym
+        :gel_id
+      end
+
+      def element_dataset
+        Window::dataset(@session)
       end
     end
   end
@@ -4345,57 +4331,55 @@ require 'lims/core/uuids/uuid_resource'
 
 module Lims::Core
   module Laboratory
-    module Sequel
-      class Labellable::LabellableSequelPersistor < LabellablePersistor
-        include Sequel::Persistor
+    class Labellable::LabellableSequelPersistor < LabellablePersistor
+      include Sequel::Persistor
 
-        def self.table_name
-          :labellables
+      def self.table_name
+        :labellables
+      end
+
+
+      def save_raw_association(labellables_id, labels_id)
+          dataset.insert(:labellables_id => labellables_id, :labels_id  => labels_id)
+      end
+
+      def filter_attributes_on_save(attributes, *params)
+        attributes.delete(:content)
+        if attributes[:type] == "resource"
+          name = attributes[:name]
+          attributes[:name] = @session.pack_uuid(name)
         end
+        attributes
+      end
 
-
-        def save_raw_association(labellables_id, labels_id)
-            dataset.insert(:labellables_id => labellables_id, :labels_id  => labels_id)
+      def filter_attributes_on_load(attributes, *params)
+        if attributes[:type] == "resource"
+          name = attributes[:name]
+          attributes[:name] = @session.unpack_uuid(name)
         end
+        attributes
+      end
 
-        def filter_attributes_on_save(attributes, *params)
-          attributes.delete(:content)
-          if attributes[:type] == "resource"
-            name = attributes[:name]
-            attributes[:name] = @session.pack_uuid(name)
+        # Mixin to be included by classes of Labellable::Labels
+        class Label  < Persistence::Labellable::Label
+          include Sequel::Persistor
+
+          def self.table_name
+            :labels
           end
-          attributes
-        end
 
-        def filter_attributes_on_load(attributes, *params)
-          if attributes[:type] == "resource"
-            name = attributes[:name]
-            attributes[:name] = @session.unpack_uuid(name)
+          def load(labellable_id)
+            dataset.filter(:labellable_id => labellable_id).each do |att|
+              position = att.delete(:position)
+              label =  Laboratory::Labellable::Label::new(att)
+              yield(position, label)
+            end
           end
-          attributes
-        end
 
-          # Mixin to be included by classes of Labellable::Labels
-          class Label  < Persistence::Labellable::Label
-            include Sequel::Persistor
-
-            def self.table_name
-              :labels
-            end
-
-            def load(labellable_id)
-              dataset.filter(:labellable_id => labellable_id).each do |att|
-                position = att.delete(:position)
-                label =  Laboratory::Labellable::Label::new(att)
-                yield(position, label)
-              end
-            end
-
-            def filter_attributes_on_save(attributes, labellable_id=nil, position=nil)
-              attributes.tap do
-                attributes[:labellable_id]= labellable_id if labellable_id
-                attributes[:position] = position if position
-              end
+          def filter_attributes_on_save(attributes, labellable_id=nil, position=nil)
+            attributes.tap do
+              attributes[:labellable_id]= labellable_id if labellable_id
+              attributes[:position] = position if position
             end
           end
         end
@@ -4572,9 +4556,7 @@ require 'common'
 module Lims
   module Core
     module Laboratory
-      module Sequel
-        module Migrations
-        end
+      module Migrations
       end
     end
   end
@@ -4591,51 +4573,49 @@ require 'lims/core/persistence/sequel/persistor'
 
 module Lims::Core
   module Organization
-    module Sequel
-      # Not a order but a order persistor.
-      class Order::OrderSequelPersistor < OrderPersistor
+    # Not a order but a order persistor.
+    class Order::OrderSequelPersistor < OrderPersistor
+      include Sequel::Persistor
+      def self.table_name
+        :orders
+      end
+
+      def filter_attributes_on_save(attributes, *params)
+        attributes.mash do |k,v|
+          case k
+            # get id of object
+          when  :creator then [:creator_id, @session.id_for!(v)]
+          when :study then [:study_id, @session.id_for!(v)]
+            # serialize structured object
+          when :parameters, :state then [k, Marshal.dump(v) ]
+          else [k, v]
+          end
+        end
+      end
+
+      def filter_attributes_on_load(attributes)
+        attributes.mash do |k,v|
+          case k
+          when :creator_id then [:creator, @session.user[v]]
+          when :study_id then [:study, @session.study[v]]
+          when :parameters, :state then [k, Marshal.load(v) ]
+          else [k, v]
+          end
+        end
+      end
+
+      class Item < Persistence::Order::Item
         include Sequel::Persistor
+
         def self.table_name
-          :orders
+          :items
         end
 
-        def filter_attributes_on_save(attributes, *params)
-          attributes.mash do |k,v|
-            case k
-              # get id of object
-            when  :creator then [:creator_id, @session.id_for!(v)]
-            when :study then [:study_id, @session.id_for!(v)]
-              # serialize structured object
-            when :parameters, :state then [k, Marshal.dump(v) ]
-            else [k, v]
-            end
-          end
-        end
-
-        def filter_attributes_on_load(attributes)
-          attributes.mash do |k,v|
-            case k
-            when :creator_id then [:creator, @session.user[v]]
-            when :study_id then [:study, @session.study[v]]
-            when :parameters, :state then [k, Marshal.load(v) ]
-            else [k, v]
-            end
-          end
-        end
-
-        class Item < Persistence::Order::Item
-          include Sequel::Persistor
-
-          def self.table_name
-            :items
-          end
-
-          def loads(order_id)
-            dataset.filter(:order_id => order_id).order(:id).each do |att|
-              role = att.delete(:role)
-              item = @session.order.item.get_or_create_single_model(att[:id], att)
-              yield(role, item)
-            end
+        def loads(order_id)
+          dataset.filter(:order_id => order_id).order(:id).each do |att|
+            role = att.delete(:role)
+            item = @session.order.item.get_or_create_single_model(att[:id], att)
+            yield(role, item)
           end
         end
       end
@@ -4655,139 +4635,137 @@ require 'active_support/inflector'
 
 module Lims::Core
   module Organization
-    module Sequel
-      # Mixin giving extended the persistor classes with
-      # the Sequel (load/save) behavior.
-      module Persistor
+    # Mixin giving extended the persistor classes with
+    # the Sequel (load/save) behavior.
+    module Persistor
 
-        include Filters
+      include Filters
 
-        def self.included(klass)
-          klass.class_eval do
-            # @return [String] the name of SQL table.
-            def self.table_name
-              @table_name ||= name.split('::').last.pluralize.snakecase.to_sym
-            end
-            # The Sequel::Dataset.
-            # Corresponds to table.
-            # @param [Sequel::Session] session 
-            # @return [::Sequel::Dataset]
-            def self.dataset(session)
-              session.database[self.table_name]
-            end
+      def self.included(klass)
+        klass.class_eval do
+          # @return [String] the name of SQL table.
+          def self.table_name
+            @table_name ||= name.split('::').last.pluralize.snakecase.to_sym
+          end
+          # The Sequel::Dataset.
+          # Corresponds to table.
+          # @param [Sequel::Session] session 
+          # @return [::Sequel::Dataset]
+          def self.dataset(session)
+            session.database[self.table_name]
           end
         end
+      end
 
-        def initialize(session_or_persistor, dataset=nil, *args, &block )
-          id_to_object, object_to_id = [nil, nil]
-          case session_or_persistor
-          when Sequel::Persistor
-            # We link the session and the identity map variables,
-            # so that object loaded via this persistor can be found (and their id)
-            # through the origial persistor.
-            # Hack to get those private variables.
-            session, identity_map_parameters  =  session_or_persistor.instance_eval do
-              [@session, [@id_to_object, @object_to_id]]
-            end
-            super(session, *args, &block)
-            @id_to_object , @object_to_id = identity_map_parameters
-          else Session
-            super(session_or_persistor, *args, &block)
+      def initialize(session_or_persistor, dataset=nil, *args, &block )
+        id_to_object, object_to_id = [nil, nil]
+        case session_or_persistor
+        when Sequel::Persistor
+          # We link the session and the identity map variables,
+          # so that object loaded via this persistor can be found (and their id)
+          # through the origial persistor.
+          # Hack to get those private variables.
+          session, identity_map_parameters  =  session_or_persistor.instance_eval do
+            [@session, [@id_to_object, @object_to_id]]
           end
-
-          @dataset = dataset || self.class.dataset(@session)
+          super(session, *args, &block)
+          @id_to_object , @object_to_id = identity_map_parameters
+        else Session
+          super(session_or_persistor, *args, &block)
         end
 
-        # @return  [String] the name of the table
-        def table_name
-          self.class.table_name
+        @dataset = dataset || self.class.dataset(@session)
+      end
+
+      # @return  [String] the name of the table
+      def table_name
+        self.class.table_name
+      end
+
+
+      # The Sequel::Dataset.
+      # Corresponds to a table.
+      # @return [::Sequel::Dataset]
+      def dataset
+        @dataset
+      end
+
+
+      # Returns the number of object in the store
+      # @return [Fixnum]
+      def count
+        dataset.count
+      end
+
+      protected
+      # load a slice.
+      def for_each_in_slice(start, length)
+        return if length == 0
+        dataset.order(primary_key).limit(length, start).each do |h|
+          key = h.delete(primary_key)
+          yield(key, h)
         end
+      end
 
+      # The primary key 
+      # @return [Symbol]
+      def primary_key()
+        :id
+      end
 
-        # The Sequel::Dataset.
-        # Corresponds to a table.
-        # @return [::Sequel::Dataset]
-        def dataset
-          @dataset
-        end
+      def load_raw_attributes(id, raw_attributes=nil)
+        dataset[primary_key => id ]
+      end
 
+      def ids_for(criteria)
+        # Use prepared statement
+        # @todo cache prepared statement or move in UuidResourcePersistor
+        # OLD dataset.select(primary_key)[criteria] || []
+        #
+        ds=dataset.select(primary_key).filter(criteria.keys.mash { |k| [k, :"\$#{k}"] })
+        statement_name = :"#{table_name}__ids_for"
+        ds.prepare(:select, statement_name)
 
-        # Returns the number of object in the store
-        # @return [Fixnum]
-        def count
-          dataset.count
-        end
+        # for some reason, the prepared statement return an array of Hashes insteead
+        # of an array of ids, as data.select(primary_key) will do
+        (@session.database.call(statement_name, criteria) || []).map { |h| h[primary_key] }
 
-        protected
-        # load a slice.
-        def for_each_in_slice(start, length)
-          return if length == 0
-          dataset.order(primary_key).limit(length, start).each do |h|
-            key = h.delete(primary_key)
-            yield(key, h)
-          end
-        end
+      end
 
-        # The primary key 
-        # @return [Symbol]
-        def primary_key()
-          :id
-        end
+      # Save a raw object, i.e. the object
+      # attributes excluding any associations.
+      # @param [Resource] object the object 
+      # @return [Fixnum, nil] the Id if save successful
+      def save_raw(object, *params)
+        # use prepared statement for everything
+        # We only need it at the moment as a workaround for saving the UUID
+        # So we might in the future either move it to a UuidResourcePersistor
+        # or cached it by attributes
+        # @todo benchmark against normal insert
+        attributes = filter_attributes_on_save(object.attributes, *params)
+        statement_name = :"#{table_name}__save_raw"
+        dataset.prepare(:insert, statement_name, attributes.keys.mash { |k| [k, :"\$#{k}"] })
+        @session.database.call(statement_name, attributes)
+      end
 
-        def load_raw_attributes(id, raw_attributes=nil)
-          dataset[primary_key => id ]
-        end
-
-        def ids_for(criteria)
-          # Use prepared statement
-          # @todo cache prepared statement or move in UuidResourcePersistor
-          # OLD dataset.select(primary_key)[criteria] || []
-          #
-          ds=dataset.select(primary_key).filter(criteria.keys.mash { |k| [k, :"\$#{k}"] })
-          statement_name = :"#{table_name}__ids_for"
-          ds.prepare(:select, statement_name)
-
-          # for some reason, the prepared statement return an array of Hashes insteead
-          # of an array of ids, as data.select(primary_key) will do
-          (@session.database.call(statement_name, criteria) || []).map { |h| h[primary_key] }
-
-        end
-
-        # Save a raw object, i.e. the object
-        # attributes excluding any associations.
-        # @param [Resource] object the object 
-        # @return [Fixnum, nil] the Id if save successful
-        def save_raw(object, *params)
-          # use prepared statement for everything
-          # We only need it at the moment as a workaround for saving the UUID
-          # So we might in the future either move it to a UuidResourcePersistor
-          # or cached it by attributes
-          # @todo benchmark against normal insert
+      # Upate a raw object, i.e. the object attributes
+      # excluding any associations.
+      # @param [Resource] object the object 
+      # @param [Fixnum] id the Id of the object
+      # @return [Fixnum, nil] the id 
+      def update_raw(object, id, *params)
+        id.tap do
           attributes = filter_attributes_on_save(object.attributes, *params)
-          statement_name = :"#{table_name}__save_raw"
-          dataset.prepare(:insert, statement_name, attributes.keys.mash { |k| [k, :"\$#{k}"] })
+          return true if attributes == {}
+          statement_name = :"#{table_name}__update_raw"
+          dataset.filter(primary_key => id).prepare(:update, statement_name, attributes.keys.mash { |k| [k, :"\$#{k}"] })
           @session.database.call(statement_name, attributes)
         end
+      end
 
-        # Upate a raw object, i.e. the object attributes
-        # excluding any associations.
-        # @param [Resource] object the object 
-        # @param [Fixnum] id the Id of the object
-        # @return [Fixnum, nil] the id 
-        def update_raw(object, id, *params)
-          id.tap do
-            attributes = filter_attributes_on_save(object.attributes, *params)
-            return true if attributes == {}
-            statement_name = :"#{table_name}__update_raw"
-            dataset.filter(primary_key => id).prepare(:update, statement_name, attributes.keys.mash { |k| [k, :"\$#{k}"] })
-            @session.database.call(statement_name, attributes)
-          end
-        end
-
-        def delete_raw(objec, id, *params)
-          id.tap do
-            dataset.filter(primary_key => id).delete
-          end
+      def delete_raw(objec, id, *params)
+        id.tap do
+          dataset.filter(primary_key => id).delete
         end
       end
     end
@@ -4806,47 +4784,45 @@ require 'lims/core/persistence/sequel/container_element'
 
 module Lims::Core
   module Laboratory
-    module Sequel
-      # Not a plate but a plate persistor.
-      class Plate::PlateSequelPersistor < PlatePersistor
-        include Sequel::Persistor
-        include Container
+    # Not a plate but a plate persistor.
+    class Plate::PlateSequelPersistor < PlatePersistor
+      include Sequel::Persistor
+      include Container
 
-        module Plate::PlateSequelPersistorContainerElement
-          include ContainerElement
+      module Plate::PlateSequelPersistorContainerElement
+        include ContainerElement
 
-          def element_dataset
-            Lims::Core::Persistence::Sequel::Plate::Well::dataset(@session)
-          end
-
-          def container_id_sym
-            :plate_id
-          end
-
-        end
-
-        # Not a well but a well {Persistor}.
-        class Well < Persistence::Plate::Well
-          include Sequel::Persistor
-          include PlateContainerElement
-
-          def self.table_name
-            :wells
-          end
-
-        end #class Well
-
-        def self.table_name
-          :plates
+        def element_dataset
+          Lims::Core::Persistence::Sequel::Plate::Well::dataset(@session)
         end
 
         def container_id_sym
           :plate_id
         end
 
-        def element_dataset
-          Well::dataset(@session)
+      end
+
+      # Not a well but a well {Persistor}.
+      class Well < Persistence::Plate::Well
+        include Sequel::Persistor
+        include PlateContainerElement
+
+        def self.table_name
+          :wells
         end
+
+      end #class Well
+
+      def self.table_name
+        :plates
+      end
+
+      def container_id_sym
+        :plate_id
+      end
+
+      def element_dataset
+        Well::dataset(@session)
       end
     end
   end
@@ -4863,31 +4839,29 @@ require 'lims/core/persistence/sequel/persistor'
 
 module Lims::Core
   module Laboratory
-    module Sequel
-      # Not a search but a search persistor.
-      class Search < Persistence::Search::Persistor
-        include Sequel::Persistor
+    # Not a search but a search persistor.
+    class Search < Persistence::Search::Persistor
+      include Sequel::Persistor
 
-        def self.table_name
-          :searches
-        end
+      def self.table_name
+        :searches
+      end
 
-        def filter_attributes_on_load(attributes)
-          {
-            :description => attributes[:description],
-            :model => constant(attributes[:model]),
-            :filter => Persistence.const_get(attributes[:filter_type]).new(Marshal.load(attributes[:filter_parameters]))
-          }
-        end
-        def filter_attributes_on_save(attributes, *args)
-          filter = attributes[:filter]
-          {
-            :description => attributes[:description],
-            :model => attributes[:model].name,
-            :filter_type => filter.class.name.split('::').last,
-            :filter_parameters => Marshal.dump(filter.attributes)
-          }
-        end
+      def filter_attributes_on_load(attributes)
+        {
+          :description => attributes[:description],
+          :model => constant(attributes[:model]),
+          :filter => Persistence.const_get(attributes[:filter_type]).new(Marshal.load(attributes[:filter_parameters]))
+        }
+      end
+      def filter_attributes_on_save(attributes, *args)
+        filter = attributes[:filter]
+        {
+          :description => attributes[:description],
+          :model => attributes[:model].name,
+          :filter_type => filter.class.name.split('::').last,
+          :filter_parameters => Marshal.dump(filter.attributes)
+        }
       end
     end
   end
@@ -4904,28 +4878,26 @@ require 'lims/core/persistence/uuidable'
 
 module Lims::Core
   module Laboratory
-    module Sequel
-      # Sequel specific implementation of a {Persistence::Session Session}.
-      class Session < Persistence::Session
-        include Uuidable
-        # Pack if needed an uuid to its store representation
-        # @param [String] uuid
-        # @return [Object]
-        def self.pack_uuid(uuid)
-          # Normal behavior shoulb be pack to binary data
-          #Uuids::UuidResource::pack(uuid)
-          #For now, we just compact it.
-          Uuids::UuidResource::compact(uuid)
+    # Sequel specific implementation of a {Persistence::Session Session}.
+    class Session < Persistence::Session
+      include Uuidable
+      # Pack if needed an uuid to its store representation
+      # @param [String] uuid
+      # @return [Object]
+      def self.pack_uuid(uuid)
+        # Normal behavior shoulb be pack to binary data
+        #Uuids::UuidResource::pack(uuid)
+        #For now, we just compact it.
+        Uuids::UuidResource::compact(uuid)
 
-        end
+      end
 
-        # Unpac if needed an uuid from its store representation
-        # @param [Object] puuid
-        # @return [String]
-        def self.unpack_uuid(puuid)
-          #Uuids::UuidResource::unpack(puuid)
-          Uuids::UuidResource::expand(puuid)
-        end
+      # Unpac if needed an uuid from its store representation
+      # @param [Object] puuid
+      # @return [String]
+      def self.unpack_uuid(puuid)
+        #Uuids::UuidResource::unpack(puuid)
+        Uuids::UuidResource::expand(puuid)
       end
     end
   end
@@ -4939,38 +4911,36 @@ require 'lims/core/persistence/sequel/persistor'
 
 module Lims::Core
   module Laboratory
-    module Sequel
-      # a spin column persistor.
-      class SpinColumn::SpinColumnSequelPersistor < SpinColumnPersistor
+    # a spin column persistor.
+    class SpinColumn::SpinColumnSequelPersistor < SpinColumnPersistor
+      include Sequel::Persistor
+
+      class SpinColumn::SpinColumnSequelPersistorAliquot < SpinColumnPersistor::SpinColumnAliquot
         include Sequel::Persistor
 
-        class SpinColumn::SpinColumnSequelPersistorAliquot < SpinColumnPersistor::SpinColumnAliquot
-          include Sequel::Persistor
-
-          # Do a bulk load of aliquot and pass each to a block
-          # @param spin_column_id the id of the spin column to load.
-          # @yieldparam [Integer] position
-          # @yieldparam [Aliquot] aliquot
-          def load_aliquots(spin_column_id)
-            dataset.join(Aliquot::dataset(@session), :id => :aliquot_id).filter(:spin_column_id => spin_column_id).each do |att|
-              att.delete(:id)
-              aliquot  = @session.aliquot.get_or_create_single_model(att[:aliquot_id], att)
-              yield(aliquot)
-            end
-          end
-
-          def save_raw_association(spin_column_id, aliquot_id)
-              dataset.insert(:spin_column_id => spin_column_id, :aliquot_id  => aliquot_id)
+        # Do a bulk load of aliquot and pass each to a block
+        # @param spin_column_id the id of the spin column to load.
+        # @yieldparam [Integer] position
+        # @yieldparam [Aliquot] aliquot
+        def load_aliquots(spin_column_id)
+          dataset.join(Aliquot::dataset(@session), :id => :aliquot_id).filter(:spin_column_id => spin_column_id).each do |att|
+            att.delete(:id)
+            aliquot  = @session.aliquot.get_or_create_single_model(att[:aliquot_id], att)
+            yield(aliquot)
           end
         end
 
-        # Delete all children of the given spin column
-        # But don't destroy the 'external' elements (example aliquots)
-        # @param [Fixnum] id the id in the database
-        # @param [Laboratory::SpinColumn] spin column
-        def delete_children(id, spin_column)
-          SpinColumnAliquot::dataset(@session).filter(:spin_column_id => id).delete
+        def save_raw_association(spin_column_id, aliquot_id)
+            dataset.insert(:spin_column_id => spin_column_id, :aliquot_id  => aliquot_id)
         end
+      end
+
+      # Delete all children of the given spin column
+      # But don't destroy the 'external' elements (example aliquots)
+      # @param [Fixnum] id the id in the database
+      # @param [Laboratory::SpinColumn] spin column
+      def delete_children(id, spin_column)
+        SpinColumnAliquot::dataset(@session).filter(:spin_column_id => id).delete
       end
     end
   end
@@ -4989,26 +4959,24 @@ require 'sequel'
 
 module Lims::Core
   module Laboratory
-    module Sequel
-      # An Sequel::Store, ie an wrapper around a database
-      # using the sequel gem
-      class Store < Persistence::Store
-        attr_reader :database
+    # An Sequel::Store, ie an wrapper around a database
+    # using the sequel gem
+    class Store < Persistence::Store
+      attr_reader :database
 
-        # Create a store with a Sequel::Database
-        # We don't wrap for now the creation  of the database
-        # @param [Sequel::Database] type underlying database
-        def initialize(database, *args)
-          raise RuntimeError unless database.is_a?(::Sequel::Database)
-          @database = database
-          super(*args)
-        end
+      # Create a store with a Sequel::Database
+      # We don't wrap for now the creation  of the database
+      # @param [Sequel::Database] type underlying database
+      def initialize(database, *args)
+        raise RuntimeError unless database.is_a?(::Sequel::Database)
+        @database = database
+        super(*args)
+      end
 
-        # Execute given block within a transaction
-        def transaction
-          database.transaction do
-            super
-          end
+      # Execute given block within a transaction
+      def transaction
+        database.transaction do
+          super
         end
       end
     end
@@ -5026,45 +4994,43 @@ require 'lims/core/persistence/sequel/persistor'
 
 module Lims::Core
   module Laboratory
-    module Sequel
-      # Not a tag_group but a tag_group persistor.
-      class TagGroup::TagGroupSequelPersistor < TagGroupPersistor
-        include Sequel::Persistor
+    # Not a tag_group but a tag_group persistor.
+    class TagGroup::TagGroupSequelPersistor < TagGroupPersistor
+      include Sequel::Persistor
 
 
-         def save_raw_association(tag_group_id, oligo_id, position)
-            Association::dataset(@session).insert(:tag_group_id => tag_group_id,
-                           :position => position,
-                           :oligo_id  => oligo_id)
-          end
+       def save_raw_association(tag_group_id, oligo_id, position)
+          Association::dataset(@session).insert(:tag_group_id => tag_group_id,
+                         :position => position,
+                         :oligo_id  => oligo_id)
+        end
 
-         def delete_children(id, group)
-           return unless id.present?
-           Association::dataset(@session).filter(primary_key => id).delete
+       def delete_children(id, group)
+         return unless id.present?
+         Association::dataset(@session).filter(primary_key => id).delete
+       end
+
+
+       class Association < Persistence::TagGroup::Association
+         include Sequel::Persistor
+         def self.table_name
+           :tag_group_associations
          end
 
-
-         class Association < Persistence::TagGroup::Association
-           include Sequel::Persistor
-           def self.table_name
-             :tag_group_associations
-           end
-
-           # Load each oligos and pass them to the block
-           # @param [Id] group_id id of the Tag group
-           # @yieldparam [Oligo] oligo Object created or loaded
-           # @yieldparam [Fixnum] position the index of Oligo in the TagGroup.
-           def load_oligos(group_id, &block)
-             dataset.join(Oligo::dataset(@session), :id => :oligo_id).filter(:tag_group_id => group_id).order(:position).each do |att|
-               position = att.delete(:position)
-               oligo_id = att.delete(:oligo_id)
-               att.delete(:group_id)
-               oligo = @session.oligo.get_or_create_single_model(oligo_id, att)
-               block.call(oligo, position) if block
-             end
+         # Load each oligos and pass them to the block
+         # @param [Id] group_id id of the Tag group
+         # @yieldparam [Oligo] oligo Object created or loaded
+         # @yieldparam [Fixnum] position the index of Oligo in the TagGroup.
+         def load_oligos(group_id, &block)
+           dataset.join(Oligo::dataset(@session), :id => :oligo_id).filter(:tag_group_id => group_id).order(:position).each do |att|
+             position = att.delete(:position)
+             oligo_id = att.delete(:oligo_id)
+             att.delete(:group_id)
+             oligo = @session.oligo.get_or_create_single_model(oligo_id, att)
+             block.call(oligo, position) if block
            end
          end
-      end
+       end
     end
   end
 end
@@ -5079,40 +5045,38 @@ require 'lims/core/persistence/sequel/persistor'
 
 module Lims::Core
   module Laboratory
-    module Sequel
-      # Not a tube but a tube persistor.
-      class Tube::TubeSequelPersistor < TubePersistor
+    # Not a tube but a tube persistor.
+    class Tube::TubeSequelPersistor < TubePersistor
+      include Sequel::Persistor
+
+      class Tube::TubeSequelPersistorAliquot < TubePersistor::TubeAliquot
         include Sequel::Persistor
 
-        class Tube::TubeSequelPersistorAliquot < TubePersistor::TubeAliquot
-          include Sequel::Persistor
-
-          # Do a bulk load of aliquot and pass each to a block
-          # @param tube_id the id of the tube to load.
-          # @yieldparam [Integer] position
-          # @yieldparam [Aliquot] aliquot
-          def load_aliquots(tube_id)
-            dataset.join(Aliquot::dataset(@session), :id => :aliquot_id).filter(:tube_id => tube_id).each do |att|
-              att.delete(:id)
-              aliquot  = @session.aliquot.get_or_create_single_model(att[:aliquot_id], att)
-              yield(aliquot)
-            end
-          end
-
-          def save_raw_association(tube_id, aliquot_id)
-              dataset.insert(:tube_id => tube_id, :aliquot_id  => aliquot_id)
+        # Do a bulk load of aliquot and pass each to a block
+        # @param tube_id the id of the tube to load.
+        # @yieldparam [Integer] position
+        # @yieldparam [Aliquot] aliquot
+        def load_aliquots(tube_id)
+          dataset.join(Aliquot::dataset(@session), :id => :aliquot_id).filter(:tube_id => tube_id).each do |att|
+            att.delete(:id)
+            aliquot  = @session.aliquot.get_or_create_single_model(att[:aliquot_id], att)
+            yield(aliquot)
           end
         end
 
-        # Delete all children of the given tube
-        # But don't destroy the 'external' elements (example aliquots)
-        # @param [Fixnum] id the id in the database
-        # @param [Laboratory::Tube] tube
-        def delete_children(id, tube)
-          TubeAliquot::dataset(@session).filter(:tube_id => id).delete
+        def save_raw_association(tube_id, aliquot_id)
+            dataset.insert(:tube_id => tube_id, :aliquot_id  => aliquot_id)
         end
-
       end
+
+      # Delete all children of the given tube
+      # But don't destroy the 'external' elements (example aliquots)
+      # @param [Fixnum] id the id in the database
+      # @param [Laboratory::Tube] tube
+      def delete_children(id, tube)
+        TubeAliquot::dataset(@session).filter(:tube_id => id).delete
+      end
+
     end
   end
 end
@@ -5127,46 +5091,44 @@ require 'lims/core/persistence/sequel/persistor'
 
 module Lims::Core
   module Laboratory
-    module Sequel
-      # Not a tube_rack but a tube_rack persistor.
-      class Tube::TubeRackSequelPersistor < TubeRackPersistor
+    # Not a tube_rack but a tube_rack persistor.
+    class Tube::TubeRackSequelPersistor < TubeRackPersistor
+      include Sequel::Persistor
+
+    # Not a well but a well {Persistor}.
+      class Slot < Persistence::TubeRack::Slot
         include Sequel::Persistor
-
-      # Not a well but a well {Persistor}.
-        class Slot < Persistence::TubeRack::Slot
-          include Sequel::Persistor
-          def self.table_name
-            :tube_rack_slots
-          end
-
-          def save_raw_association(tube_rack_id, tube_id, position)
-              dataset.insert(:tube_rack_id => tube_rack_id,
-                             :position => position,
-                             :tube_id  => tube_id)
-          end
-
-          # Do a bulk load of aliquot and pass each to a block
-          # @param tube_rack_id the id of the tube_rack to load.
-          # @yieldparam [Integer] position
-          # @yieldparam [Aliquot] aliquot
-          def load_tubes(tube_rack_id)
-            dataset.join(Tube::dataset(@session), :id => :tube_id).filter(:tube_rack_id => tube_rack_id).each do |att|
-              position = att.delete(:position)
-              att.delete(:id)
-              tube  = @session.tube.get_or_create_single_model(att[:tube_id], att)
-              yield(position, tube)
-            end
-          end
-        end #class Well
-
         def self.table_name
-          :tube_racks
+          :tube_rack_slots
         end
 
-        # Delete the tube, rack association, but doesn't delete the tube.
-        def delete_children(id, tube_rack)
-          Slot.dataset(@session).filter(:tube_rack_id => id).delete
+        def save_raw_association(tube_rack_id, tube_id, position)
+            dataset.insert(:tube_rack_id => tube_rack_id,
+                           :position => position,
+                           :tube_id  => tube_id)
         end
+
+        # Do a bulk load of aliquot and pass each to a block
+        # @param tube_rack_id the id of the tube_rack to load.
+        # @yieldparam [Integer] position
+        # @yieldparam [Aliquot] aliquot
+        def load_tubes(tube_rack_id)
+          dataset.join(Tube::dataset(@session), :id => :tube_id).filter(:tube_rack_id => tube_rack_id).each do |att|
+            position = att.delete(:position)
+            att.delete(:id)
+            tube  = @session.tube.get_or_create_single_model(att[:tube_id], att)
+            yield(position, tube)
+          end
+        end
+      end #class Well
+
+      def self.table_name
+        :tube_racks
+      end
+
+      # Delete the tube, rack association, but doesn't delete the tube.
+      def delete_children(id, tube_rack)
+        Slot.dataset(@session).filter(:tube_rack_id => id).delete
       end
     end
   end
@@ -5183,8 +5145,6 @@ require 'common'
 module Lims::Core::Persistence
   # Persistence module using the {http://sequel.rubyforge.org/ sequel} gem.
   # It implements abstract/base classes : {Store}, {Session} etc.
-  module Sequel
-  end
 end
 
 # require everything
@@ -12079,52 +12039,50 @@ require 'lims/core/persistence/sequel/session'
 
 
 module Lims::Core::Persistence
-  module Sequel
-    describe Session do
-      context "with sqlite underlying" do
-        let(:db) { ::Sequel.sqlite('') }
-        let(:store) { Store.new(db) }
+  describe Session do
+    context "with sqlite underlying" do
+      let(:db) { ::Sequel.sqlite('') }
+      let(:store) { Store.new(db) }
 
-        context "#transaction" do
-          let(:a) { "A" }
-          let(:b) { "B" }
-          let(:c) { "C" }
+      context "#transaction" do
+        let(:a) { "A" }
+        let(:b) { "B" }
+        let(:c) { "C" }
 
-          before() do
-              db.create_table :names do
-                primary_key :id
-                String :name
-              end
-
-              Session.any_instance.stub(:save) do |arg|
-                case arg
-                when "A", "B"
-                  db[:names].insert(:name => arg)
-                when "C"
-                  raise RuntimeError, "Can't save 'C'"
-                end
-              end
-          end
-
-          it "save the 2 if no problem" do
-            expect { store.with_session do |s|
-              s << a << b
-            end }.to change{db[:names].count}.by(2)
-          end
-
-          it "saves 0 if the second doesn't save" do
-            expect {
-              begin
-              store.with_session do |s|
-              s << a << c
+        before() do
+            db.create_table :names do
+              primary_key :id
+              String :name
             end
-          rescue
-          end
-            }.to change{db[:names].count}.by(0)
-          end
 
-          xit "saves 0 if the second is not valid" do
+            Session.any_instance.stub(:save) do |arg|
+              case arg
+              when "A", "B"
+                db[:names].insert(:name => arg)
+              when "C"
+                raise RuntimeError, "Can't save 'C'"
+              end
+            end
+        end
+
+        it "save the 2 if no problem" do
+          expect { store.with_session do |s|
+            s << a << b
+          end }.to change{db[:names].count}.by(2)
+        end
+
+        it "saves 0 if the second doesn't save" do
+          expect {
+            begin
+            store.with_session do |s|
+            s << a << c
           end
+        rescue
+        end
+          }.to change{db[:names].count}.by(0)
+        end
+
+        xit "saves 0 if the second is not valid" do
         end
       end
     end
