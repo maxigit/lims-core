@@ -2665,7 +2665,7 @@ module Lims::Core
   end
 end
 __END_OF_organization.rb__
-filename='lib/lims-core/laboratory/aliquot/aliquot.rb
+filename='lib/lims-core/laboratory/aliquot/aliquot_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_aliquot.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -2680,13 +2680,13 @@ module Lims::Core
     # Base for all Aliquot persistor.
     # Real implementation classes (e.g. Sequel::Aliquot) should
     # include the suitable persistor.
-    class Aliquot::Aliquot < Persistor
+    class Aliquot::AliquotPersistor < Persistor
       Model = Laboratory::Aliquot
     end
   end
 end
 __END_OF_aliquot.rb__
-filename='lib/lims-core/organization/batch/batch.rb
+filename='lib/lims-core/organization/batch/batch_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_batch.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -2695,13 +2695,13 @@ require 'lims/core/organization/batch'
 
 module Lims::Core
   module Organization
-    class Batch::Batch < Persistor
+    class Batch::BatchPersistor < Persistor
       Model = Organization::Batch
     end
   end
 end
 __END_OF_batch.rb__
-filename='lib/lims-core/organization/batch/batch_filter.rb
+filename='lib/lims-core/organization/batch/batch_filter_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_batch_filter.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -2710,7 +2710,7 @@ require 'lims/core/resource'
 
 module Lims::Core
   module Organization
-    class Batch::BatchFilter < Filter
+    class Batch::BatchFilterPersistor < Filter
       include Resource
       attribute :criteria, Hash, :required => true
       
@@ -2821,7 +2821,7 @@ module Lims::Core
 end
 
 __END_OF_filter.rb__
-filename='lib/lims-core/laboratory/flowcell/flowcell.rb
+filename='lib/lims-core/laboratory/flowcell/flowcell_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_flowcell.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -2836,7 +2836,7 @@ module Lims::Core
     # Base for all Flowcell persistor.
     # Real implementation classes (e.g. Sequel::Flowcell) should
     # include the suitable persistor.
-    class Flowcell::Flowcell < Persistor
+    class Flowcell::FlowcellPersistor < Persistor
       Model = Laboratory::Flowcell
 
       # @abstract
@@ -2856,7 +2856,7 @@ module Lims::Core
   end
 end
 __END_OF_flowcell.rb__
-filename='lib/lims-core/laboratory/gel/gel.rb
+filename='lib/lims-core/laboratory/gel/gel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_gel.rb__ > $filename
 require 'lims/core/persistence/persistor'
@@ -2870,7 +2870,7 @@ module Lims::Core
     # Base for all Gel persistor.
     # Real implementation classes (e.g. Sequel::Gel) should
     # include the suitable persistor.
-    class Gel::Gel < Persistor
+    class Gel::GelPersistor < Persistor
       Model = Laboratory::Gel
 
       include Container
@@ -3007,7 +3007,7 @@ module Lims::Core
 end
 
 __END_OF_label_filter.rb__
-filename='lib/lims-core/laboratory/labellable/labellable.rb
+filename='lib/lims-core/laboratory/labellable/labellable_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_labellable.rb__ > $filename
 require 'lims/core/persistence/persistor'
@@ -3018,7 +3018,7 @@ require 'lims/core/laboratory/sanger_barcode'
 
 module Lims::Core
   module Laboratory
-    class Labellable::Labellable < Persistor
+    class Labellable::LabellablePersistor < Persistor
       Model = Laboratory::Labellable
 
       def label
@@ -3352,7 +3352,7 @@ module Lims::Core
 end
 
 __END_OF_multi_criteria_filter.rb__
-filename='lib/lims-core/laboratory/oligo/oligo.rb
+filename='lib/lims-core/laboratory/oligo/oligo_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_oligo.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -3367,13 +3367,13 @@ module Lims::Core
     # Base for all Plate persistor.
     # Real implementation classes (e.g. Sequel::Plate) should
     # include the suitable persistor.
-    class Oligo::Oligo < Persistor
+    class Oligo::OligoPersistor < Persistor
       Model = Laboratory::Oligo
     end
   end
 end
 __END_OF_oligo.rb__
-filename='lib/lims-core/organization/order/order.rb
+filename='lib/lims-core/organization/order/order_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_order.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -3384,7 +3384,7 @@ require 'lims/core/organization/order'
 module Lims::Core
   module Organization
     # Base for all Order persistor.
-    class Order::Order < Persistor
+    class Order::OrderPersistor < Persistor
       Model = Organization::Order
 
       # Saves all children of the given order
@@ -3454,7 +3454,7 @@ module Lims::Core
   end
 end
 __END_OF_order.rb__
-filename='lib/lims-core/organization/order/order_filter.rb
+filename='lib/lims-core/organization/order/order_filter_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_order_filter.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -3480,7 +3480,7 @@ module Lims::Core
     #   Will look for all the orders in pending or in progress status
     #   *holding* a plate with a pending status.
     #    
-    class Order::OrderFilter < Filter 
+    class Order::OrderFilterPersistor < Filter 
       include Resource
       attribute :criteria, Hash, :required => true
       # For Sequel, keys needs to be a Symbol to be seen as column.
@@ -3793,7 +3793,7 @@ module Lims::Core
   end
 end
 __END_OF_persistor.rb__
-filename='lib/lims-core/laboratory/plate/plate.rb
+filename='lib/lims-core/laboratory/plate/plate_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_plate.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -3809,7 +3809,7 @@ module Lims::Core
     # Base for all Plate persistor.
     # Real implementation classes (e.g. Sequel::Plate) should
     # include the suitable persistor.
-    class Plate::Plate < Persistor
+    class Plate::PlatePersistor < Persistor
       Model = Laboratory::Plate
 
       include Container
@@ -3836,7 +3836,7 @@ module Lims::Core
   end
 end
 __END_OF_plate.rb__
-filename='lib/lims-core/laboratory/sample/sample.rb
+filename='lib/lims-core/laboratory/sample/sample_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_sample.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -3851,7 +3851,7 @@ module Lims::Core
     # Base for all Sample persistor.
     # Real implementation classes (e.g. Sequel::Aliquot) should
     # include the suitable persistor.
-    class Sample::Sample < Persistor
+    class Sample::SamplePersistor < Persistor
       Model = Laboratory::Sample
 
       # Doesn't update. At the moment, samples are managed as an external table
@@ -5432,7 +5432,7 @@ module Lims::Core
 end
 
 __END_OF_session.rb__
-filename='lib/lims-core/laboratory/spin_column/spin_column.rb
+filename='lib/lims-core/laboratory/spin_column/spin_column_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_spin_column.rb__ > $filename
 require 'lims/core/persistence/persistor'
@@ -5444,7 +5444,7 @@ module Lims::Core
     # Base for all Spin Column persistor.
     # Real implementation classes (e.g. Sequel::SpinColumn) should
     # include the suitable persistor.
-    class SpinColumn::SpinColumn < Persistor
+    class SpinColumn::SpinColumnPersistor < Persistor
       Model = Laboratory::SpinColumn
 
       # Save all children of the given spin column
@@ -5462,7 +5462,7 @@ module Lims::Core
         @session.send("SpinColumn::SpinColumnAliquot")
       end
 
-      class SpinColumn::SpinColumnAliquot < Persistor
+      class SpinColumn::SpinColumnPersistorAliquot < Persistor
       end
 
       # Load all children of the given spin column
@@ -5544,7 +5544,7 @@ module Lims::Core
 end
 
 __END_OF_store.rb__
-filename='lib/lims-core/organization/study/study.rb
+filename='lib/lims-core/organization/study/study_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_study.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -5555,13 +5555,13 @@ require 'lims/core/organization/study'
 module Lims::Core
   module Organization
     # Base for all Study persistors.
-    class Study::Study < Persistor
+    class Study::StudyPersistor < Persistor
       Model = Organization::Study
     end
   end
 end
 __END_OF_study.rb__
-filename='lib/lims-core/laboratory/tag_group/tag_group.rb
+filename='lib/lims-core/laboratory/tag_group/tag_group_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_tag_group.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -5576,7 +5576,7 @@ module Lims::Core
     # Base for all Plate persistor.
     # Real implementation classes (e.g. Sequel::Plate) should
     # include the suitable persistor.
-    class TagGroup::TagGroup < Persistor
+    class TagGroup::TagGroupPersistor < Persistor
       Model = Laboratory::TagGroup
 
       # Save all children of the given group
@@ -5617,7 +5617,7 @@ module Lims::Core
   end
 end
 __END_OF_tag_group.rb__
-filename='lib/lims-core/laboratory/tube/tube.rb
+filename='lib/lims-core/laboratory/tube/tube_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_tube.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -5632,7 +5632,7 @@ module Lims::Core
     # Base for all Tube persistor.
     # Real implementation classes (e.g. Sequel::Tube) should
     # include the suitable persistor.
-    class Tube::Tube < Persistor
+    class Tube::TubePersistor < Persistor
       Model = Laboratory::Tube
 
       # Save all children of the given tube
@@ -5650,7 +5650,7 @@ module Lims::Core
         @session.send("Tube::TubeAliquot")
       end
 
-      class Tube::TubeAliquot < Persistor
+      class Tube::TubePersistorAliquot < Persistor
       end
 
       # Load all children of the given tube
@@ -5668,7 +5668,7 @@ module Lims::Core
   end
 end
 __END_OF_tube.rb__
-filename='lib/lims-core/laboratory/tube/tube_rack.rb
+filename='lib/lims-core/laboratory/tube/tube_rack_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_tube_rack.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -5683,7 +5683,7 @@ module Lims::Core
     # Base for all TubeRack persistor.
     # Real implementation classes (e.g. Sequel::TubeRack) should
     # include the suitable persistor.
-    class Tube::TubeRack < Persistor
+    class Tube::TubeRackPersistor < Persistor
       Model = Laboratory::TubeRack
 
       # Save all children of the given tube_rack
@@ -5720,7 +5720,7 @@ module Lims::Core
   end
 end
 __END_OF_tube_rack.rb__
-filename='lib/lims-core/organization/user/user.rb
+filename='lib/lims-core/organization/user/user_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_user.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -5731,13 +5731,13 @@ require 'lims/core/organization/user'
 module Lims::Core
   module Organization
     # Base for all User persistors.
-    class User::User < Persistor
+    class User::UserPersistor < Persistor
       Model = Organization::User
     end
   end
 end
 __END_OF_user.rb__
-filename='lib/lims-core/uuids/uuid_resource/uuid_resource.rb
+filename='lib/lims-core/uuids/uuid_resource/uuid_resource_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_uuid_resource.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -5748,7 +5748,7 @@ require 'lims/core/uuids/uuid_resource'
 
 module Lims::Core
   module  Uuids
-    class UuidResource::UuidResource < Persistor
+    class UuidResource::UuidResourcePersistor < Persistor
       Model = Uuids::UuidResource
 
       def filter_attributes_on_save(attributes)
@@ -5954,29 +5954,17 @@ require 'lims/core/persistence/search'
 require 'lims/core/persistence/message_bus'
 
 unless  defined?(Lims::Core::NO_AUTOLOAD)
->>   require 'lims/core/persistence/aliquot'
   require 'lims/core/laboratory//aliquot'
->>   require 'lims/core/persistence/sample'
   require 'lims/core/laboratory//sample'
->>   require 'lims/core/persistence/flowcell'
   require 'lims/core/laboratory//flowcell'
->>   require 'lims/core/persistence/oligo'
   require 'lims/core/laboratory//oligo'
->>   require 'lims/core/persistence/plate'
   require 'lims/core/laboratory//plate'
->>   require 'lims/core/persistence/labellable'
   require 'lims/core/laboratory//labellable'
->>   require 'lims/core/persistence/order'
   require 'lims/core/organization//order'
->>   require 'lims/core/persistence/user'
   require 'lims/core/organization//user'
->>   require 'lims/core/persistence/study'
   require 'lims/core/organization//study'
->>   require 'lims/core/persistence/tag_group'
   require 'lims/core/laboratory//tag_group'
->>   require 'lims/core/persistence/tube'
   require 'lims/core/laboratory//tube'
->>   require 'lims/core/persistence/spin_column'
   require 'lims/core/laboratory//spin_column'
 end
 __END_OF_persistence.rb__
@@ -6012,7 +6000,7 @@ module Lims::Core
       # Bind a uuid (as a String) to a Resource (a key and a model)
       # The key is a FixNum to find the corresponding resource in the store
       # and the model is the real class of the object (or at least something allowing to find it)
-      class UuidResource::UuidResource
+      class UuidResource::UuidResourcePersistor
         include Resource
         attribute :key, Fixnum, :writer => :private, :initializable => true
         attribute :model_class, Class, :writer => :private, :initializable => true
