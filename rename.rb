@@ -33,7 +33,7 @@ resource = nil
 resource_class = nil
 ARGF.each do |line|
   case line
-  when  /^(filename.*)\/(actions|persistence)\/(\w\+\/)?((#{resource_reg}).*).rb/
+  when  /^(filename.*)\/(actions|persistence)\/(\w+\/)?((#{resource_reg}).*).rb/
     resource = $5
     if new_directory=directory_map[resource.to_sym]
       old_module = $2.capitalize
@@ -41,7 +41,7 @@ ARGF.each do |line|
       new_module = current_directory.to_s.capitalize
       filename =$4
       if $2 == "persistence"
-        filename += "_#{$3}" if $3
+        filename += "_#{$3[0...-1]}" if $3
         filename += "_persistor"
       end
       new_class = filename.split('_').map(&:capitalize).join

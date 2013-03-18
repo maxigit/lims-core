@@ -3914,7 +3914,7 @@ module Lims::Core
 end
 
 __END_OF_search.rb__
-filename='lib/lims-core/persistence/sequel/aliquot.rb'
+filename='lib/lims-core/laboratory/aliquot/aliquot_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_aliquot.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -3926,7 +3926,7 @@ module Lims::Core
   module Laboratory
     module Sequel
       # Not a aliquot but a aliquot persistor.
-      class Aliquot < Persistence::Aliquot
+      class Aliquot::AliquotSequelPersistor < Persistence::Aliquot
         include Sequel::Persistor
         def self.table_name
           :aliquots
@@ -3957,7 +3957,7 @@ module Lims::Core
   end
 end
 __END_OF_aliquot.rb__
-filename='lib/lims-core/persistence/sequel/batch.rb'
+filename='lib/lims-core/organization/batch/batch_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_batch.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -3966,9 +3966,9 @@ require 'lims/core/persistence/batch'
 require 'lims/core/persistence/sequel/persistor'
 
 module Lims::Core
-  module Laboratory
+  module Organization
     module Sequel
-      class Batch < Persistence::Batch
+      class Batch::BatchSequelPersistor < Persistence::Batch
         include Sequel::Persistor
 
         def self.table_name
@@ -3983,7 +3983,7 @@ filename='lib/lims-core/persistence/sequel/container.rb'
 mkdir -p $(dirname $filename)
 cat <<__END_OF_container.rb__ > $filename
 module Lims::Core
-  module Laboratory
+  module Organization
     module Sequel
       module Container
 
@@ -4029,7 +4029,7 @@ filename='lib/lims-core/persistence/sequel/container_element.rb'
 mkdir -p $(dirname $filename)
 cat <<__END_OF_container_element.rb__ > $filename
 module Lims::Core
-  module Laboratory
+  module Organization
     module Sequel
       module ContainerElement
 
@@ -4064,7 +4064,7 @@ require 'lims/core/persistence/sequel/persistor'
 require 'active_support/inflector'
 
 module Lims::Core
-  module Laboratory
+  module Organization
     module Sequel
       # Implementes filter methods needed by persitors.
       module Filters
@@ -4194,7 +4194,7 @@ module Lims::Core
 end
 
 __END_OF_filters.rb__
-filename='lib/lims-core/persistence/sequel/flowcell.rb'
+filename='lib/lims-core/laboratory/flowcell/flowcell_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_flowcell.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -4206,7 +4206,7 @@ module Lims::Core
   module Laboratory
     module Sequel
       # Not a flowcell but a flowcell persistor.
-      class Flowcell < Persistence::Flowcell
+      class Flowcell::FlowcellSequelPersistor < Persistence::Flowcell
         include Sequel::Persistor
 
       # Not a lane but a lane {Persistor}.
@@ -4278,7 +4278,7 @@ module Lims::Core
   end
 end
 __END_OF_flowcell.rb__
-filename='lib/lims-core/persistence/sequel/gel.rb'
+filename='lib/lims-core/laboratory/gel/gel_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_gel.rb__ > $filename
 require 'lims/core/persistence/gel'
@@ -4290,11 +4290,11 @@ module Lims::Core
   module Laboratory
     module Sequel
       # A gel persistor. It saves the gel's data to the DB.
-      class Gel < Persistence::Gel
+      class Gel::GelSequelPersistor < Persistence::Gel
         include Sequel::Persistor
         include Container
 
-        module GelContainerElement
+        module Gel::GelSequelPersistorContainerElement
           include ContainerElement
 
           def element_dataset
@@ -4335,7 +4335,7 @@ module Lims::Core
   end
 end
 __END_OF_gel.rb__
-filename='lib/lims-core/persistence/sequel/labellable.rb'
+filename='lib/lims-core/laboratory/labellable/labellable_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_labellable.rb__ > $filename
 require 'lims/core/persistence/labellable'
@@ -4346,7 +4346,7 @@ require 'lims/core/uuids/uuid_resource'
 module Lims::Core
   module Laboratory
     module Sequel
-      class Labellable < Persistence::Labellable
+      class Labellable::LabellableSequelPersistor < Persistence::Labellable
         include Sequel::Persistor
 
         def self.table_name
@@ -4581,7 +4581,7 @@ module Lims
 end
 require_all('migrations/*') 
 __END_OF_migrations.rb__
-filename='lib/lims-core/persistence/sequel/order.rb'
+filename='lib/lims-core/organization/order/order_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_order.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -4590,10 +4590,10 @@ require 'lims/core/persistence/order'
 require 'lims/core/persistence/sequel/persistor'
 
 module Lims::Core
-  module Laboratory
+  module Organization
     module Sequel
       # Not a order but a order persistor.
-      class Order < Persistence::Order
+      class Order::OrderSequelPersistor < Persistence::Order
         include Sequel::Persistor
         def self.table_name
           :orders
@@ -4654,7 +4654,7 @@ require 'active_support/inflector'
 
 
 module Lims::Core
-  module Laboratory
+  module Organization
     module Sequel
       # Mixin giving extended the persistor classes with
       # the Sequel (load/save) behavior.
@@ -4794,7 +4794,7 @@ module Lims::Core
   end
 end
 __END_OF_persistor.rb__
-filename='lib/lims-core/persistence/sequel/plate.rb'
+filename='lib/lims-core/laboratory/plate/plate_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_plate.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -4808,11 +4808,11 @@ module Lims::Core
   module Laboratory
     module Sequel
       # Not a plate but a plate persistor.
-      class Plate < Persistence::Plate
+      class Plate::PlateSequelPersistor < Persistence::Plate
         include Sequel::Persistor
         include Container
 
-        module PlateContainerElement
+        module Plate::PlateSequelPersistorContainerElement
           include ContainerElement
 
           def element_dataset
@@ -4931,7 +4931,7 @@ module Lims::Core
   end
 end
 __END_OF_session.rb__
-filename='lib/lims-core/persistence/sequel/spin_column.rb'
+filename='lib/lims-core/laboratory/spin_column/spin_column_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_spin_column.rb__ > $filename
 require 'lims/core/persistence/spin_column'
@@ -4941,10 +4941,10 @@ module Lims::Core
   module Laboratory
     module Sequel
       # a spin column persistor.
-      class SpinColumn < Persistence::SpinColumn
+      class SpinColumn::SpinColumnSequelPersistor < Persistence::SpinColumn
         include Sequel::Persistor
 
-        class SpinColumnAliquot < Persistence::SpinColumn::SpinColumnAliquot
+        class SpinColumn::SpinColumnSequelPersistorAliquot < Persistence::SpinColumn::SpinColumnAliquot
           include Sequel::Persistor
 
           # Do a bulk load of aliquot and pass each to a block
@@ -5016,7 +5016,7 @@ module Lims::Core
   end
 end
 __END_OF_store.rb__
-filename='lib/lims-core/persistence/sequel/tag_group.rb'
+filename='lib/lims-core/laboratory/tag_group/tag_group_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_tag_group.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -5028,7 +5028,7 @@ module Lims::Core
   module Laboratory
     module Sequel
       # Not a tag_group but a tag_group persistor.
-      class TagGroup < Persistence::TagGroup
+      class TagGroup::TagGroupSequelPersistor < Persistence::TagGroup
         include Sequel::Persistor
 
 
@@ -5069,7 +5069,7 @@ module Lims::Core
   end
 end
 __END_OF_tag_group.rb__
-filename='lib/lims-core/persistence/sequel/tube.rb'
+filename='lib/lims-core/laboratory/tube/tube_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_tube.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -5081,10 +5081,10 @@ module Lims::Core
   module Laboratory
     module Sequel
       # Not a tube but a tube persistor.
-      class Tube < Persistence::Tube
+      class Tube::TubeSequelPersistor < Persistence::Tube
         include Sequel::Persistor
 
-        class TubeAliquot < Persistence::Tube::TubeAliquot
+        class Tube::TubeSequelPersistorAliquot < Persistence::Tube::TubeAliquot
           include Sequel::Persistor
 
           # Do a bulk load of aliquot and pass each to a block
@@ -5117,7 +5117,7 @@ module Lims::Core
   end
 end
 __END_OF_tube.rb__
-filename='lib/lims-core/persistence/sequel/tube_rack.rb'
+filename='lib/lims-core/laboratory/tube/tube_rack_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_tube_rack.rb__ > $filename
 # vi: ts=2:sts=2:et:sw=2 spell:spelllang=en
@@ -5129,7 +5129,7 @@ module Lims::Core
   module Laboratory
     module Sequel
       # Not a tube_rack but a tube_rack persistor.
-      class TubeRack < Persistence::TubeRack
+      class Tube::TubeRackSequelPersistor < Persistence::TubeRack
         include Sequel::Persistor
 
       # Not a well but a well {Persistor}.
@@ -10649,7 +10649,7 @@ module Lims::Core::Persistence
   end
 end
 __END_OF_identity_map_spec.rb__
-filename='spec/persistence/logger/plate_spec.rb'
+filename='spec/laboratory/plate/plate_spec_logger_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_plate_spec.rb__ > $filename
 # Spec requirements
@@ -10744,7 +10744,7 @@ cat <<__END_OF_message_bus_spec.rb__ > $filename
 require 'lims-core/persistence/message_bus'
 
 module Lims::Core
-  module Persistence
+  module Laboratory
     describe MessageBus do
       context "to be valid" do
         let(:url) { "amqp://user:password@localhost:55672" }
@@ -10831,7 +10831,7 @@ require 'persistence/spec_helper'
 require 'lims-core/persistence/search'
 
 module Lims::Core
-  module Persistence
+  module Laboratory
     describe Search do
       context "to be valid" do
         let(:filter) { mock(:filter) }
@@ -10859,7 +10859,7 @@ module Lims::Core
   end
 end
 __END_OF_search_spec.rb__
-filename='spec/persistence/sequel/batch_filter_shared.rb'
+filename='spec/organization/batch/batch_filter_shared_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_batch_filter_shared.rb__ > $filename
 require 'persistence/sequel/spec_helper'
@@ -10907,7 +10907,7 @@ module Lims::Core
   end
 end
 __END_OF_batch_filter_shared.rb__
-filename='spec/persistence/sequel/batch_spec.rb'
+filename='spec/organization/batch/batch_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_batch_spec.rb__ > $filename
 # Spec requirements
@@ -10953,7 +10953,7 @@ module Lims::Core
   end
 end
 __END_OF_batch_spec.rb__
-filename='spec/persistence/sequel/flowcell_spec.rb'
+filename='spec/laboratory/flowcell/flowcell_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_flowcell_spec.rb__ > $filename
 # Spec requirements
@@ -11056,7 +11056,7 @@ module Lims::Core
   end
 end
 __END_OF_flowcell_spec.rb__
-filename='spec/persistence/sequel/gel_spec.rb'
+filename='spec/laboratory/gel/gel_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_gel_spec.rb__ > $filename
 # Spec requirements
@@ -11257,7 +11257,7 @@ module Lims::Core
   end
 end
 __END_OF_label_filter_shared.rb__
-filename='spec/persistence/sequel/labellable_spec.rb'
+filename='spec/laboratory/labellable/labellable_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_labellable_spec.rb__ > $filename
 # Spec requirements
@@ -11335,7 +11335,7 @@ end
 
 end
 __END_OF_multi_criteria_filter_shared.rb__
-filename='spec/persistence/sequel/oligo_spec.rb'
+filename='spec/laboratory/oligo/oligo_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_oligo_spec.rb__ > $filename
 # Spec requirements
@@ -11379,7 +11379,7 @@ module Lims::Core
   end
 end
 __END_OF_oligo_spec.rb__
-filename='spec/persistence/sequel/order_lookup_filter_shared.rb'
+filename='spec/organization/order/order_lookup_filter_shared_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_order_lookup_filter_shared.rb__ > $filename
 # Spec requirements
@@ -11390,7 +11390,7 @@ require 'lims/core/persistence/multi_criteria_filter'
 require 'lims/core/persistence/order_filter'
 
 module Lims::Core
-  module Persistence
+  module Organization
     shared_context "with saved orders" do
       include_context "with saved batches"
       let(:basic_parameters) { { :creator => Organization::User.new(), :study => Organization::Study.new(), :pipeline => "testing" } }
@@ -11548,7 +11548,7 @@ module Lims::Core
   end
 end
 __END_OF_order_lookup_filter_shared.rb__
-filename='spec/persistence/sequel/order_spec.rb'
+filename='spec/organization/order/order_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_order_spec.rb__ > $filename
 # Spec requirements
@@ -11810,7 +11810,7 @@ shared_examples_for "paginable" do
   end
 end
 __END_OF_page_shared.rb__
-filename='spec/persistence/sequel/plate_spec.rb'
+filename='spec/laboratory/plate/plate_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_plate_spec.rb__ > $filename
 # Spec requirements
@@ -11977,7 +11977,7 @@ module Lims::Core
   end
 end
 __END_OF_plate_spec.rb__
-filename='spec/persistence/sequel/sample_spec.rb'
+filename='spec/laboratory/sample/sample_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_sample_spec.rb__ > $filename
 # Spec requirements
@@ -12040,7 +12040,7 @@ require 'lims/core/persistence/order_filter'
 require 'logger'
 module Lims::Core
 
-  module Persistence
+  module Laboratory
 
     describe Sequel::Search  do
       include_context "sequel store"
@@ -12151,7 +12151,7 @@ end
 
 
 __END_OF_spec_helper.rb__
-filename='spec/persistence/sequel/spin_column_spec.rb'
+filename='spec/laboratory/spin_column/spin_column_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_spin_column_spec.rb__ > $filename
 # Spec requirements
@@ -12294,7 +12294,7 @@ module Lims::Core::Persistence
     end
 end
 __END_OF_store_spec.rb__
-filename='spec/persistence/sequel/tag_group_spec.rb'
+filename='spec/laboratory/tag_group/tag_group_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_tag_group_spec.rb__ > $filename
 # Spec requirements
@@ -12406,7 +12406,7 @@ module Lims::Core
   end
 end
 __END_OF_tag_group_spec.rb__
-filename='spec/persistence/sequel/tube_rack_spec.rb'
+filename='spec/laboratory/tube/tube_rack_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_tube_rack_spec.rb__ > $filename
 # Spec requirements
@@ -12541,7 +12541,7 @@ module Lims::Core
   end
 end
 __END_OF_tube_rack_spec.rb__
-filename='spec/persistence/sequel/tube_spec.rb'
+filename='spec/laboratory/tube/tube_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_tube_spec.rb__ > $filename
 # Spec requirements
@@ -12692,7 +12692,7 @@ module Lims::Core
 end
 
 __END_OF_tube_spec.rb__
-filename='spec/persistence/sequel/uuid_resource_spec.rb'
+filename='spec/uuids/uuid_resource/uuid_resource_spec_sequel_persistor.rb
 mkdir -p $(dirname $filename)
 cat <<__END_OF_uuid_resource_spec.rb__ > $filename
 require 'persistence/sequel/spec_helper'
@@ -12703,7 +12703,7 @@ require 'lims/core/persistence/sequel/store'
 require 'lims/core/persistence/uuid_resource'
 
 module Lims::Core
-  module Persistence
+  module Uuids
     describe Sequel::UuidResource do
       include_context "sequel store"
 #      before  { Uuids::UuidResource.stub(:pack) { |s| s }  }
