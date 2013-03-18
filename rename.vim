@@ -5,6 +5,7 @@
 %s!persistence/sequel/\(\w\+\)!XXX/\1/\1_sequel_persistor/
 %s!persistence/\(\w\+\)!XXX/\1/\1_persistor/
 
-g/plate\|tube\|sample\|aliquot\|gel\|tag\|flowcell\|spin\|lane/s/XXX/laboratory
+g/plate\|tube\|sample\|aliquot\|gel\|tag\|flowcell\|spin\|lane\|label/s/XXX/laboratory
 g/order\|batch\|study\|user/s/XXX/organization
+g/action\|container\|search/s/XXX/actions/g
 
