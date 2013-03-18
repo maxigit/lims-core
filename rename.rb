@@ -60,6 +60,7 @@ ARGF.each do |line|
       puts line
     end
   else
+    puts line
     
   end
 
